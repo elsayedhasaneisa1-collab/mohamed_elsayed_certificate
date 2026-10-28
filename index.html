@@ -7,9 +7,6 @@
 
     <title>نظام الشهادات | الأستاذ محمد عيسى</title>
 
-    <meta name="description"
-          content="نظام إنشاء شهادات التقدير والتميّز للطلاب">
-
     <link rel="manifest" href="./manifest.json">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,13 +20,13 @@
     <style>
         :root {
             --navy: #081a35;
-            --navy-light: #102c53;
+            --navy2: #102c53;
             --gold: #d6af47;
             --gold-light: #f8e7a0;
-            --white: #ffffff;
+            --white: #fff;
             --muted: #a8b6cc;
-            --panel: rgba(13, 33, 63, .88);
-            --border: rgba(214, 175, 71, .22);
+            --panel: rgba(13, 33, 63, .94);
+            --border: rgba(214, 175, 71, .24);
             --green: #38d9a9;
             --red: #ff7777;
         }
@@ -45,12 +42,12 @@
             background:
                 radial-gradient(
                     circle at 10% 0%,
-                    rgba(30, 74, 128, .45),
+                    rgba(30, 74, 128, .4),
                     transparent 35%
                 ),
                 radial-gradient(
                     circle at 100% 100%,
-                    rgba(130, 91, 21, .13),
+                    rgba(130, 91, 21, .12),
                     transparent 35%
                 ),
                 var(--navy);
@@ -60,287 +57,106 @@
             overflow-x: hidden;
         }
 
-        button,
-        input,
-        select,
-        textarea {
+        button, input, select, textarea {
             font: inherit;
         }
 
         button {
+            cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .page {
-            width: min(1500px, 100%);
-            margin: auto;
-            padding: 28px;
-        }
+        /* =========================
+           شاشة القفل
+        ========================= */
 
-        /* HEADER */
-
-        .header {
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 28px;
+            justify-content: center;
+            padding: 20px;
+            background:
+                radial-gradient(
+                    circle at top,
+                    #173961,
+                    transparent 55%
+                ),
+                #061329;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .lock-card {
+            width: 100%;
+            max-width: 410px;
+            padding: 35px 25px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            background: rgba(9, 27, 52, .95);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, .4);
         }
 
-        .brand-icon {
-            width: 60px;
-            height: 60px;
+        .lock-icon {
+            width: 75px;
+            height: 75px;
             display: grid;
             place-items: center;
-            flex-shrink: 0;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            background: linear-gradient(
-                145deg,
-                #17375f,
-                #0a1c36
-            );
-            color: var(--gold-light);
-            font-size: 28px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, .22);
-        }
-
-        .brand h1 {
-            font-size: clamp(19px, 3vw, 27px);
-            font-weight: 900;
-        }
-
-        .brand p {
-            color: var(--muted);
-            font-size: 13px;
-            margin-top: 3px;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            border: 1px solid rgba(56, 217, 169, .2);
-            border-radius: 50px;
-            background: rgba(56, 217, 169, .07);
-            color: #9df5d9;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--green);
-            border-radius: 50%;
-            box-shadow: 0 0 12px var(--green);
-        }
-
-        /* INTRO */
-
-        .hero {
-            position: relative;
-            padding: 30px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-            background:
-                linear-gradient(
-                    115deg,
-                    rgba(17, 46, 83, .95),
-                    rgba(8, 26, 53, .95)
-                );
-        }
-
-        .hero::after {
-            content: "✦";
-            position: absolute;
-            left: 35px;
-            top: 10px;
-            font-size: 100px;
-            color: rgba(214, 175, 71, .09);
-            pointer-events: none;
-        }
-
-        .hero-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--gold-light);
-            font-size: 12px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .hero h2 {
-            font-size: clamp(23px, 4vw, 35px);
-            font-weight: 900;
-            line-height: 1.7;
-        }
-
-        .hero h2 span {
-            color: var(--gold-light);
-        }
-
-        .hero p {
-            color: #b5c5db;
-            font-size: 14px;
-            line-height: 2;
-            max-width: 700px;
-            margin-top: 7px;
-        }
-
-        /* MAIN GRID */
-
-        .workspace {
-            display: grid;
-            grid-template-columns: 340px minmax(0, 1fr);
-            gap: 24px;
-            align-items: start;
-        }
-
-        .panel {
-            border: 1px solid var(--border);
+            margin: 0 auto 20px;
+            border: 1px solid rgba(214, 175, 71, .35);
             border-radius: 22px;
-            background: var(--panel);
-            overflow: hidden;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, .16);
-        }
-
-        .panel-header {
-            padding: 23px 23px 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, .07);
-        }
-
-        .panel-header h3 {
-            font-size: 19px;
-            font-weight: 900;
-        }
-
-        .panel-header p {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 5px;
-            line-height: 1.9;
-        }
-
-        .form-body {
-            padding: 22px;
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
+            background: rgba(214, 175, 71, .08);
             color: var(--gold-light);
-            font-size: 13px;
+            font-size: 35px;
+        }
+
+        .lock-card h1 {
+            color: var(--gold-light);
+            font-size: 26px;
             font-weight: 900;
-            margin: 3px 0 17px;
         }
 
-        .section-title::before {
-            content: "";
-            width: 4px;
-            height: 18px;
-            border-radius: 5px;
-            background: var(--gold);
+        .lock-card p {
+            margin: 10px 0 25px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 2;
         }
 
-        .field {
-            margin-bottom: 17px;
-        }
-
-        .field label {
-            display: block;
-            color: #d7e1f0;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
+        .lock-input {
             width: 100%;
-            min-height: 47px;
-            border: 1px solid rgba(255, 255, 255, .11);
-            border-radius: 12px;
-            background: rgba(3, 14, 30, .7);
+            height: 55px;
+            padding: 12px;
+            text-align: center;
+            letter-spacing: 8px;
             color: white;
+            font-size: 22px;
+            font-weight: 800;
+            background: #061329;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 13px;
             outline: none;
-            padding: 11px 13px;
-            transition: border-color .2s, box-shadow .2s;
+            margin-bottom: 13px;
         }
 
-        .field textarea {
-            min-height: 85px;
-            resize: vertical;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
+        .lock-input:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(214, 175, 71, .09);
         }
-
-        .field input::placeholder,
-        .field textarea::placeholder {
-            color: #73839b;
-        }
-
-        .field select option {
-            background: var(--navy);
-            color: white;
-        }
-
-        .two-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .check-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #d7e1f0;
-            font-size: 12px;
-            margin: 10px 0;
-            cursor: pointer;
-        }
-
-        .check-row input {
-            width: 17px;
-            height: 17px;
-            accent-color: var(--gold);
-            cursor: pointer;
-        }
-
-        /* BUTTONS */
 
         .btn {
             width: 100%;
             min-height: 48px;
-            border: 1px solid transparent;
-            border-radius: 13px;
             padding: 12px 15px;
+            border: 1px solid transparent;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 9px;
             font-weight: 900;
             font-size: 13px;
-            cursor: pointer;
-            transition: transform .2s, filter .2s;
+            transition: .2s;
         }
 
         .btn:hover {
@@ -355,62 +171,293 @@
         }
 
         .btn-gold {
+            color: #17243b;
             background: linear-gradient(
                 135deg,
                 #f5df92,
                 #d6af47 55%,
                 #b98b25
             );
-            color: #17243b;
-            box-shadow: 0 8px 24px rgba(214, 175, 71, .13);
         }
 
         .btn-outline {
-            border-color: rgba(214, 175, 71, .35);
+            color: var(--gold-light);
             background: rgba(214, 175, 71, .06);
+            border-color: var(--border);
+        }
+
+        .lock-card .btn + .btn {
+            margin-top: 12px;
+        }
+
+        .lock-error {
+            display: none;
+            margin-top: 15px;
+            color: #ff8b8b;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+
+        .lock-note {
+            margin-top: 20px;
+            color: #71849e;
+            font-size: 10px;
+            line-height: 1.9;
+        }
+
+        /* =========================
+           واجهة الموقع
+        ========================= */
+
+        #app {
+            display: none;
+        }
+
+        .page {
+            width: min(1500px, 100%);
+            margin: auto;
+            padding: 25px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 55px;
+            height: 55px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--panel);
+            font-size: 26px;
+        }
+
+        .brand h2 {
+            font-size: 23px;
+            font-weight: 900;
+        }
+
+        .brand p {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .logout-btn {
+            width: auto;
+            min-height: 40px;
+            padding: 9px 14px;
+            color: #ffb4b4;
+            border: 1px solid rgba(255, 119, 119, .25);
+            background: rgba(255, 119, 119, .05);
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .hero {
+            padding: 27px;
+            margin-bottom: 23px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: linear-gradient(
+                115deg,
+                #112e53,
+                #091b36
+            );
+        }
+
+        .hero-label {
+            color: var(--gold-light);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .hero h1 {
+            margin-top: 8px;
+            font-size: clamp(23px, 4vw, 34px);
+            line-height: 1.7;
+            font-weight: 900;
+        }
+
+        .hero h1 span {
             color: var(--gold-light);
         }
 
-        .btn-dark {
-            border-color: rgba(255, 255, 255, .1);
-            background: rgba(255, 255, 255, .04);
-            color: #e2eaf5;
+        .hero p {
+            max-width: 750px;
+            margin-top: 6px;
+            color: #b5c5db;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 330px minmax(0, 1fr);
+            align-items: start;
+            gap: 20px;
+        }
+
+        .panel {
+            min-width: 0;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--panel);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .15);
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, .07);
+        }
+
+        .panel-header h3 {
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .panel-header p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.9;
+        }
+
+        .form-body {
+            padding: 20px;
+        }
+
+        .section-title {
+            margin: 4px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--gold-light);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 17px;
+            border-radius: 5px;
+            background: var(--gold);
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #d7e1f0;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            min-height: 45px;
+            padding: 11px 12px;
+            color: white;
+            background: #07182e;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 11px;
+            outline: none;
+        }
+
+        .field textarea {
+            min-height: 85px;
+            resize: vertical;
+            line-height: 1.9;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--gold);
+        }
+
+        .field input::placeholder,
+        .field textarea::placeholder {
+            color: #75859b;
+        }
+
+        .field select option {
+            background: var(--navy);
+        }
+
+        .two-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 10px 0;
+            color: #d7e1f0;
+            font-size: 12px;
+        }
+
+        .check-row input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--gold);
         }
 
         .button-stack {
             display: grid;
             gap: 10px;
-            margin-top: 25px;
+            margin-top: 22px;
         }
 
         .notice {
-            margin-top: 16px;
-            padding: 13px;
-            border: 1px solid rgba(214, 175, 71, .15);
-            border-radius: 12px;
-            background: rgba(214, 175, 71, .05);
-            color: #bdc9d9;
+            margin-top: 15px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(214, 175, 71, .04);
+            color: #b8c7da;
             font-size: 11px;
             line-height: 2;
         }
 
-        /* PREVIEW */
-
-        .preview-panel {
-            min-width: 0;
-        }
+        /* =========================
+           معاينة الشهادة
+        ========================= */
 
         .preview-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            padding: 20px 23px;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 18px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, .07);
         }
 
         .preview-top h3 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
         }
 
@@ -422,93 +469,84 @@
 
         .preview-tag {
             padding: 7px 10px;
-            border-radius: 8px;
             color: var(--gold-light);
-            background: rgba(214, 175, 71, .08);
-            font-size: 11px;
+            background: rgba(214, 175, 71, .07);
+            border-radius: 8px;
+            font-size: 10px;
             white-space: nowrap;
         }
 
         .preview-area {
-            padding: 22px;
-            min-width: 0;
+            padding: 16px;
             overflow: hidden;
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(24, 49, 82, .5),
-                    transparent 70%
-                );
         }
 
-        .certificate-viewport {
+        #certificateViewport {
             width: 100%;
             position: relative;
+            overflow: hidden;
         }
 
         /*
-          المقاس الأصلي للشهادة:
+          مقاس الشهادة الأصلي:
           1400 × 990 بكسل.
-          المعاينة تتغير حسب عرض الشاشة.
         */
 
         #certificate {
+            position: relative;
             width: 1400px;
             height: 990px;
-            position: relative;
             overflow: hidden;
             flex-shrink: 0;
             transform-origin: top right;
             background: #fff;
-            color: #10264a;
+            color: #10284d;
             direction: rtl;
-            box-shadow: 0 18px 55px rgba(0, 0, 0, .35);
             isolation: isolate;
         }
 
-        .certificate-background {
+        .cert-bg {
             position: absolute;
             inset: 0;
+            z-index: -2;
             width: 100%;
             height: 100%;
             object-fit: fill;
-            z-index: -2;
             pointer-events: none;
         }
 
-        .certificate-overlay {
+        .cert-overlay {
             position: absolute;
-            inset: 100px 115px;
-            border: 1px solid rgba(190, 147, 37, .23);
-            pointer-events: none;
             z-index: -1;
+            inset: 100px 110px;
+            border: 1px solid rgba(190, 147, 37, .22);
+            pointer-events: none;
         }
 
         .cert-inner {
-            height: 100%;
-            width: 100%;
-            padding: 65px 125px 45px;
+            position: relative;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 58px 125px 37px;
             text-align: center;
-            position: relative;
         }
 
         .cert-topline {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 18px;
-            color: #9b7624;
-            font-size: 19px;
+            align-items: center;
+            gap: 16px;
+            color: #947022;
+            font-size: 18px;
             font-weight: 900;
-            letter-spacing: 1px;
         }
 
         .cert-topline::before,
         .cert-topline::after {
             content: "";
-            width: 90px;
+            width: 85px;
             height: 2px;
             background: linear-gradient(
                 90deg,
@@ -517,31 +555,26 @@
             );
         }
 
-        .cert-topline::after {
-            transform: rotate(180deg);
-        }
-
         .cert-title {
-            font-family: "Amiri", serif;
-            font-size: 68px;
-            font-weight: 700;
+            margin-top: 3px;
             color: #10284d;
-            line-height: 1.4;
-            margin-top: 5px;
+            font-family: "Amiri", serif;
+            font-size: 65px;
+            line-height: 1.3;
+            font-weight: 700;
         }
 
         .cert-subtitle {
-            color: #9a762b;
-            font-size: 21px;
+            margin-top: 4px;
+            color: #967329;
+            font-size: 19px;
             font-weight: 800;
-            margin-top: -2px;
         }
 
         .cert-divider {
-            width: 230px;
+            width: 220px;
             height: 3px;
-            margin: 17px auto 0;
-            border-radius: 50%;
+            margin: 12px auto 0;
             background: linear-gradient(
                 90deg,
                 transparent,
@@ -554,129 +587,151 @@
 
         .cert-body {
             flex: 1;
+            min-height: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 10px 0 5px;
+            align-items: center;
+            padding: 8px 0;
         }
 
         .cert-intro {
-            font-size: 25px;
-            font-weight: 700;
             color: #33445c;
-            line-height: 1.9;
+            font-size: 23px;
+            font-weight: 700;
+            line-height: 1.7;
         }
 
-        .cert-student-name {
+        .cert-student {
             display: block;
             max-width: 100%;
-            font-family: "Amiri", serif;
-            font-size: 61px;
-            font-weight: 700;
-            color: #10284d;
-            line-height: 1.6;
-            padding: 0 25px 8px;
-            margin: 5px 0 10px;
+            margin: 2px 0 5px;
+            padding: 0 25px 5px;
             border-bottom: 2px solid #d8b957;
+            color: #10284d;
+            font-family: "Amiri", serif;
+            font-size: 57px;
+            font-weight: 700;
+            line-height: 1.5;
             overflow-wrap: anywhere;
         }
 
         .cert-description {
-            max-width: 900px;
+            max-width: 950px;
             color: #3b4b61;
-            font-size: 23px;
-            line-height: 2;
+            font-size: 21px;
+            line-height: 1.75;
             font-weight: 600;
         }
 
         .cert-course {
             display: block;
-            margin-top: 7px;
+            margin-top: 2px;
             color: #173c6c;
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 900;
-            line-height: 1.7;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .cert-achievement {
+            margin-top: 2px;
+            color: #33445c;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.6;
             overflow-wrap: anywhere;
         }
 
         .cert-quote {
-            max-width: 850px;
-            margin-top: 15px;
+            max-width: 900px;
+            margin-top: 7px;
             color: #8a6b2d;
             font-family: "Amiri", serif;
-            font-size: 25px;
+            font-size: 22px;
             font-weight: 700;
-            line-height: 1.8;
+            line-height: 1.55;
+            overflow-wrap: anywhere;
         }
 
         .cert-stats {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 13px;
-            margin-top: 18px;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .cert-stat {
-            min-width: 150px;
-            padding: 10px 18px;
+            min-width: 145px;
+            padding: 7px 14px;
             border: 1px solid rgba(194, 154, 53, .35);
             border-radius: 9px;
-            background: rgba(255, 255, 255, .76);
+            background: rgba(255, 255, 255, .8);
         }
 
         .cert-stat-label {
             display: block;
             color: #7b6b49;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .cert-stat-value {
             display: block;
+            margin-top: 1px;
             color: #132e52;
-            font-size: 21px;
+            font-size: 19px;
             font-weight: 900;
-            margin-top: 2px;
             overflow-wrap: anywhere;
         }
 
         .cert-footer {
             display: grid;
-            grid-template-columns: 1fr 1.3fr 1fr;
+            grid-template-columns: 1fr 1.2fr 1fr;
             align-items: end;
-            gap: 25px;
-            margin-top: 12px;
+            gap: 20px;
+            min-height: 120px;
+            margin-top: 6px;
         }
 
-        .cert-signature {
+        .cert-signature,
+        .cert-issue {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: end;
-            padding-bottom: 7px;
             min-width: 0;
+            padding-bottom: 5px;
         }
 
         .signature-line {
             width: 100%;
-            max-width: 220px;
+            max-width: 205px;
+            margin-bottom: 7px;
             border-top: 2px solid #9b7a2c;
-            margin-bottom: 9px;
         }
 
-        .signature-title {
+        .signature-title,
+        .issue-label {
             color: #8d702d;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 800;
         }
 
-        .signature-name {
-            margin-top: 5px;
+        .signature-name,
+        .issue-date {
+            margin-top: 4px;
             color: #10284d;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
+            overflow-wrap: anywhere;
+        }
+
+        .cert-number {
+            margin-top: 6px;
+            color: #6f7885;
+            font-size: 11px;
+            direction: ltr;
             overflow-wrap: anywhere;
         }
 
@@ -688,14 +743,14 @@
         }
 
         .teacher-image-wrap {
-            width: 112px;
-            height: 112px;
+            width: 105px;
+            height: 105px;
+            padding: 3px;
+            margin-bottom: 6px;
             overflow: hidden;
             border: 4px solid #d6b14b;
             border-radius: 50%;
             background: #fff;
-            padding: 3px;
-            margin-bottom: 9px;
         }
 
         .teacher-image {
@@ -708,164 +763,111 @@
 
         .teacher-name {
             color: #10284d;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
+            overflow-wrap: anywhere;
         }
 
         .teacher-role {
+            margin-top: 1px;
             color: #8b6a27;
-            font-size: 15px;
-            font-weight: 800;
-            margin-top: 2px;
-        }
-
-        .cert-issue {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: end;
-            padding-bottom: 7px;
-        }
-
-        .issue-label {
-            color: #8d702d;
-            font-size: 17px;
+            font-size: 14px;
             font-weight: 800;
         }
-
-        .issue-date {
-            color: #10284d;
-            font-size: 20px;
-            font-weight: 900;
-            margin-top: 6px;
-        }
-
-        .cert-number {
-            color: #6f7885;
-            font-size: 12px;
-            margin-top: 8px;
-            direction: ltr;
-        }
-
-        /* FOOTER */
 
         .footer {
+            padding: 23px 10px 5px;
             text-align: center;
-            color: #7f91a9;
-            font-size: 12px;
+            color: #8092a9;
+            font-size: 11px;
             line-height: 2;
-            padding: 25px 10px 5px;
         }
 
         .footer strong {
             color: var(--gold-light);
         }
 
-        /* TOAST */
+        /* الرسائل */
 
-        .toast {
+        #toast {
             position: fixed;
-            bottom: 25px;
+            z-index: 100000;
             right: 50%;
-            transform: translate(50%, 25px);
+            bottom: 20px;
             width: max-content;
             max-width: calc(100% - 30px);
-            padding: 14px 22px;
-            border: 1px solid rgba(214, 175, 71, .3);
-            border-radius: 14px;
-            background: #112b4e;
-            color: white;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .3);
+            padding: 13px 20px;
+            transform: translate(50%, 20px);
             opacity: 0;
             visibility: hidden;
-            transition: .25s;
-            z-index: 9999;
+            background: #112b4e;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
             text-align: center;
+            transition: .25s;
         }
 
-        .toast.show {
+        #toast.show {
             opacity: 1;
             visibility: visible;
             transform: translate(50%, 0);
         }
 
-        .toast.error {
+        #toast.error {
             border-color: var(--red);
         }
 
-        .toast.success {
+        #toast.success {
             border-color: var(--green);
         }
 
-        /* RESPONSIVE */
+        /* =========================
+           الموبايل
+        ========================= */
 
-        @media (max-width: 1100px) {
-            .page {
-                padding: 20px;
-            }
-
-            .workspace {
-                grid-template-columns: 300px minmax(0, 1fr);
-                gap: 15px;
-            }
-
-            .preview-area {
-                padding: 14px;
-            }
-
-            .cert-inner {
-                padding-right: 125px;
-                padding-left: 125px;
-            }
-        }
-
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .workspace {
                 grid-template-columns: 1fr;
-            }
-
-            .form-body {
-                padding: 20px;
             }
 
             .preview-area {
                 padding: 12px;
             }
-
-            .hero {
-                padding: 23px;
-            }
         }
 
         @media (max-width: 500px) {
             .page {
-                padding: 13px;
+                padding: 12px;
             }
 
             .header {
                 align-items: flex-start;
-                flex-direction: column;
-                gap: 13px;
-                margin-bottom: 18px;
             }
 
             .brand-icon {
-                width: 48px;
-                height: 48px;
-                font-size: 23px;
-                border-radius: 14px;
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+            }
+
+            .brand h2 {
+                font-size: 19px;
             }
 
             .brand p {
-                font-size: 11px;
+                font-size: 10px;
+            }
+
+            .logout-btn {
+                font-size: 10px;
+                padding: 8px;
             }
 
             .hero {
                 padding: 19px;
-                border-radius: 17px;
-                margin-bottom: 17px;
             }
 
             .hero p {
@@ -873,41 +875,78 @@
             }
 
             .panel {
-                border-radius: 17px;
-            }
-
-            .panel-header,
-            .preview-top {
-                padding: 17px;
+                border-radius: 16px;
             }
 
             .form-body {
-                padding: 17px;
+                padding: 15px;
             }
 
             .preview-area {
-                padding: 9px;
+                padding: 8px;
             }
 
-            .preview-top h3 {
-                font-size: 14px;
-            }
-
-            .preview-tag {
-                font-size: 10px;
-            }
-
-            .two-fields {
-                gap: 8px;
+            .preview-top {
+                padding: 14px;
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                transition: none !important;
+        /* =========================
+           الطباعة
+        ========================= */
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+
+            html, body {
+                width: 297mm;
+                height: 210mm;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: white !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            #lockScreen,
+            .header,
+            .hero,
+            .workspace > aside,
+            .preview-top,
+            .footer,
+            #toast {
+                display: none !important;
+            }
+
+            #app,
+            .page,
+            .workspace,
+            .preview-panel,
+            .preview-area,
+            #certificateViewport {
+                display: block !important;
+                width: 297mm !important;
+                height: 210mm !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+                overflow: hidden !important;
+                background: white !important;
+                box-shadow: none !important;
+            }
+
+            #certificate {
+                position: absolute !important;
+                top: 0 !important;
+                right: 0 !important;
+                transform: scale(.797) !important;
+                transform-origin: top right !important;
+                box-shadow: none !important;
             }
         }
     </style>
@@ -915,180 +954,237 @@
 
 <body>
 
-    <main class="page">
+    <!-- شاشة الدخول -->
 
-        <header class="header">
-            <div class="brand">
-                <div class="brand-icon" aria-hidden="true">🏆</div>
+    <section id="lockScreen">
 
-                <div>
-                    <h1>نظام الشهادات</h1>
-                    <p>الأستاذ محمد عيسى · شهادات التقدير والتميّز</p>
-                </div>
-            </div>
+        <div class="lock-card">
 
-            <div class="status">
-                <span class="status-dot"></span>
-                مولّد الشهادات جاهز
-            </div>
-        </header>
+            <div class="lock-icon">🔐</div>
 
-        <section class="hero">
-            <div class="hero-label">
-                ✦ التميّز يستحق التقدير
-            </div>
-
-            <h2>
-                كل مجهود يستحق <span>شهادة تليق به</span>
-            </h2>
+            <h1>نظام الشهادات</h1>
 
             <p>
-                أنشئ شهادة تقدير مميزة تعكس اجتهاد الطالب وإنجازه،
-                وخصّص بياناتها ثم احفظها بجودة عالية لتكون ذكرى
-                جميلة لرحلة تعلّمه.
+                هذه الواجهة مخصصة للإدارة.<br>
+                أدخل كلمة المرور للمتابعة.
             </p>
-        </section>
 
-        <section class="workspace">
+            <form id="loginForm">
 
-            <!-- FORM -->
+                <input
+                    class="lock-input"
+                    id="passwordInput"
+                    type="password"
+                    inputmode="numeric"
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                    aria-label="كلمة المرور"
+                    required
+                >
 
-            <aside class="panel">
+                <button
+                    class="btn btn-gold"
+                    type="submit"
+                >
+                    🔓 دخول إلى النظام
+                </button>
 
-                <div class="panel-header">
-                    <h3>⚙️ تخصيص الشهادة</h3>
+            </form>
 
-                    <p>
-                        أدخل بيانات الطالب وشاهد التغييرات مباشرة
-                        في معاينة الشهادة.
-                    </p>
+            <button
+                class="btn btn-outline"
+                id="biometricBtn"
+                type="button"
+                style="margin-top:12px"
+            >
+                👆 تجربة بصمة الجهاز
+            </button>
+
+            <div class="lock-error" id="loginError">
+                كلمة المرور غير صحيحة. حاول مرة أخرى.
+            </div>
+
+            <div class="lock-note">
+                البصمة تتطلب HTTPS وجهازًا ومتصفحًا يدعمان WebAuthn.
+                تفعيلها هنا ليس بديلًا عن مصادقة موثوقة على الخادم.
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- التطبيق -->
+
+    <div id="app">
+
+        <main class="page">
+
+            <header class="header">
+
+                <div class="brand">
+                    <div class="brand-icon">🏆</div>
+
+                    <div>
+                        <h2>نظام الشهادات</h2>
+                        <p>الأستاذ محمد عيسى · شهادات التقدير والتميّز</p>
+                    </div>
                 </div>
 
-                <div class="form-body">
+                <button class="logout-btn" id="logoutBtn">
+                    🔒 قفل النظام
+                </button>
 
-                    <div class="section-title">
-                        بيانات الطالب
+            </header>
+
+            <section class="hero">
+
+                <div class="hero-label">
+                    ✦ التميّز يستحق التقدير
+                </div>
+
+                <h1>
+                    كل مجهود يستحق
+                    <span>شهادة تليق به</span>
+                </h1>
+
+                <p>
+                    شهادة بتصميم أزرق وذهبي، وتنسيق متوازن
+                    يبرز اسم الطالب وإنجازه ويحافظ على وضوح
+                    النصوص داخل إطار الشهادة.
+                </p>
+
+            </section>
+
+            <section class="workspace">
+
+                <!-- لوحة البيانات -->
+
+                <aside class="panel">
+
+                    <div class="panel-header">
+                        <h3>⚙️ تخصيص الشهادة</h3>
+                        <p>
+                            عدّل البيانات وشاهد النتيجة مباشرة.
+                        </p>
                     </div>
 
-                    <div class="field">
-                        <label for="studentName">اسم الطالب بالكامل *</label>
+                    <div class="form-body">
 
-                        <input
-                            id="studentName"
-                            type="text"
-                            maxlength="100"
-                            autocomplete="off"
-                            placeholder="اكتب اسم الطالب"
-                            value="اسم الطالب"
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="certificateType">نوع الشهادة</label>
-
-                        <select id="certificateType">
-                            <option value="شهادة تقدير وتميّز">
-                                شهادة تقدير وتميّز
-                            </option>
-
-                            <option value="شهادة إتمام">
-                                شهادة إتمام
-                            </option>
-
-                            <option value="شهادة نجاح وتفوّق">
-                                شهادة نجاح وتفوّق
-                            </option>
-
-                            <option value="شهادة اجتهاد ومثابرة">
-                                شهادة اجتهاد ومثابرة
-                            </option>
-
-                            <option value="شهادة مشاركة">
-                                شهادة مشاركة
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="courseName">المادة أو الدورة *</label>
-
-                        <input
-                            id="courseName"
-                            type="text"
-                            maxlength="120"
-                            placeholder="مثال: اللغة العربية"
-                            value="اللغة العربية"
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="description">
-                            رسالة تقدير خاصة
-                        </label>
-
-                        <textarea
-                            id="description"
-                            maxlength="300"
-                        >تقديرًا لاجتهاده ومثابرته، وما بذله من جهد في سبيل العلم، وإصراره على التعلّم والتقدّم. مع أطيب التمنيات له بمزيد من النجاح والتفوّق.</textarea>
-                    </div>
-
-                    <div class="section-title">
-                        بيانات الإنجاز
-                    </div>
-
-                    <div class="field">
-                        <label for="achievement">
-                            الإنجاز الذي حصل عليه الطالب
-                        </label>
-
-                        <input
-                            id="achievement"
-                            type="text"
-                            maxlength="100"
-                            value="إتمام متطلبات التعلّم"
-                            placeholder="مثال: اجتياز الاختبار النهائي"
-                        >
-                    </div>
-
-                    <div class="two-fields">
+                        <div class="section-title">
+                            بيانات الطالب
+                        </div>
 
                         <div class="field">
-                            <label for="grade">الدرجة</label>
+                            <label for="studentName">
+                                اسم الطالب
+                            </label>
 
                             <input
-                                id="grade"
-                                type="text"
-                                maxlength="30"
-                                placeholder="مثال: 95 / 100"
+                                id="studentName"
+                                maxlength="100"
+                                value=""
+                                placeholder="اكتب الاسم بالكامل"
                             >
                         </div>
 
                         <div class="field">
-                            <label for="percentage">نسبة النجاح</label>
+                            <label for="certificateType">
+                                نوع الشهادة
+                            </label>
+
+                            <select id="certificateType">
+                                <option>شهادة تقدير وتميّز</option>
+                                <option>شهادة إتمام</option>
+                                <option>شهادة نجاح وتفوّق</option>
+                                <option>شهادة اجتهاد ومثابرة</option>
+                                <option>شهادة مشاركة</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="courseName">
+                                المادة أو الدورة
+                            </label>
 
                             <input
-                                id="percentage"
-                                type="text"
-                                maxlength="20"
-                                placeholder="مثال: 95%"
+                                id="courseName"
+                                maxlength="120"
+                                value="اللغة العربية"
+                                placeholder="اسم المادة"
                             >
                         </div>
 
-                    </div>
+                        <div class="field">
+                            <label for="achievement">
+                                الإنجاز
+                            </label>
 
-                    <label class="check-row">
-                        <input type="checkbox" id="showGrade" checked>
-                        إظهار بيانات الدرجة ونسبة النجاح
-                    </label>
-
-                    <div class="section-title">
-                        بيانات الإصدار
-                    </div>
-
-                    <div class="two-fields">
+                            <input
+                                id="achievement"
+                                maxlength="150"
+                                value="إتمام متطلبات التعلّم"
+                                placeholder="مثال: اجتياز الاختبار النهائي"
+                            >
+                        </div>
 
                         <div class="field">
-                            <label for="issueDate">تاريخ الإصدار</label>
+                            <label for="description">
+                                رسالة التقدير
+                            </label>
+
+                            <textarea
+                                id="description"
+                                maxlength="300"
+                            >تقديرًا لاجتهاده ومثابرته، وما بذله من جهد في سبيل العلم، وإصراره على التعلّم والتقدّم، مع أطيب التمنيات له بمزيد من النجاح والتفوّق.</textarea>
+                        </div>
+
+                        <div class="section-title">
+                            بيانات الإنجاز
+                        </div>
+
+                        <div class="two-fields">
+
+                            <div class="field">
+                                <label for="grade">الدرجة</label>
+
+                                <input
+                                    id="grade"
+                                    maxlength="30"
+                                    placeholder="95 / 100"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="percentage">
+                                    النسبة
+                                </label>
+
+                                <input
+                                    id="percentage"
+                                    maxlength="20"
+                                    placeholder="95%"
+                                >
+                            </div>
+
+                        </div>
+
+                        <label class="check-row">
+                            <input
+                                type="checkbox"
+                                id="showGrade"
+                                checked
+                            >
+                            إظهار الدرجة والنسبة
+                        </label>
+
+                        <div class="section-title">
+                            بيانات الإصدار
+                        </div>
+
+                        <div class="field">
+                            <label for="issueDate">
+                                تاريخ الإصدار
+                            </label>
 
                             <input id="issueDate" type="date">
                         </div>
@@ -1100,340 +1196,323 @@
 
                             <input
                                 id="certificateNumber"
-                                type="text"
-                                maxlength="40"
-                                placeholder="اختياري"
+                                maxlength="50"
                                 value="CERT-001"
                             >
                         </div>
 
-                    </div>
+                        <div class="field">
+                            <label for="teacherName">
+                                اسم المدرس
+                            </label>
 
-                    <div class="field">
-                        <label for="teacherName">اسم المدرس</label>
-
-                        <input
-                            id="teacherName"
-                            type="text"
-                            maxlength="100"
-                            value="الأستاذ محمد عيسى"
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="teacherRole">الصفة أو التخصص</label>
-
-                        <input
-                            id="teacherRole"
-                            type="text"
-                            maxlength="100"
-                            value="مدرس اللغة العربية"
-                        >
-                    </div>
-
-                    <div class="field">
-                        <label for="signature">اسم الموقّع</label>
-
-                        <input
-                            id="signature"
-                            type="text"
-                            maxlength="100"
-                            value="الأستاذ محمد عيسى"
-                        >
-                    </div>
-
-                    <div class="button-stack">
-
-                        <button
-                            class="btn btn-gold"
-                            id="downloadBtn"
-                            type="button"
-                        >
-                            <span>⬇️</span>
-                            تحميل الشهادة بجودة عالية
-                        </button>
-
-                        <button
-                            class="btn btn-outline"
-                            id="printBtn"
-                            type="button"
-                        >
-                            <span>🖨️</span>
-                            طباعة الشهادة
-                        </button>
-
-                        <button
-                            class="btn btn-dark"
-                            id="resetBtn"
-                            type="button"
-                        >
-                            إعادة البيانات الافتراضية
-                        </button>
-
-                    </div>
-
-                    <div class="notice">
-                        <strong>ملاحظة:</strong>
-                        احرص على إدخال الدرجة والإنجاز الفعليين للطالب.
-                        الشهادة المولّدة من هذه الصفحة لا تتحقق وحدها
-                        من النتائج أو استحقاق الطالب للشهادة.
-                    </div>
-
-                </div>
-            </aside>
-
-            <!-- PREVIEW -->
-
-            <section class="panel preview-panel">
-
-                <div class="preview-top">
-
-                    <div>
-                        <h3>معاينة الشهادة</h3>
-
-                        <p>
-                            تتحدث تلقائيًا مع كل تعديل.
-                        </p>
-                    </div>
-
-                    <div class="preview-tag">
-                        PNG · جودة عالية
-                    </div>
-
-                </div>
-
-                <div class="preview-area">
-
-                    <div class="certificate-viewport"
-                         id="certificateViewport">
-
-                        <article id="certificate">
-
-                            <!-- خلفية الشهادة المرفقة -->
-
-                            <img
-                                class="certificate-background"
-                                src="./sayed.png"
-                                alt=""
-                                crossorigin="anonymous"
+                            <input
+                                id="teacherName"
+                                maxlength="100"
+                                value="الأستاذ محمد عيسى"
                             >
+                        </div>
 
-                            <div class="certificate-overlay"></div>
+                        <div class="field">
+                            <label for="teacherRole">
+                                التخصص
+                            </label>
 
-                            <div class="cert-inner">
+                            <input
+                                id="teacherRole"
+                                maxlength="100"
+                                value="مدرس اللغة العربية"
+                            >
+                        </div>
 
-                                <div class="cert-topline">
-                                    شهادة إنجاز وتقدير
-                                </div>
+                        <div class="field">
+                            <label for="signature">
+                                اسم الموقّع
+                            </label>
 
-                                <h2
-                                    class="cert-title"
-                                    id="outType"
-                                >
-                                    شهادة تقدير وتميّز
-                                </h2>
+                            <input
+                                id="signature"
+                                maxlength="100"
+                                value="الأستاذ محمد عيسى"
+                            >
+                        </div>
 
-                                <div class="cert-subtitle">
-                                    تقديرًا للعلم والاجتهاد والمثابرة
-                                </div>
+                        <div class="button-stack">
 
-                                <div class="cert-divider"></div>
+                            <button
+                                class="btn btn-gold"
+                                id="downloadBtn"
+                                type="button"
+                            >
+                                ⬇️ تحميل الشهادة PNG
+                            </button>
 
-                                <div class="cert-body">
+                            <button
+                                class="btn btn-outline"
+                                id="printBtn"
+                                type="button"
+                            >
+                                🖨️ طباعة الشهادة
+                            </button>
 
-                                    <div class="cert-intro">
-                                        بكل فخر واعتزاز، تُمنح هذه الشهادة إلى
-                                    </div>
+                            <button
+                                class="btn btn-outline"
+                                id="resetBtn"
+                                type="button"
+                            >
+                                إعادة البيانات
+                            </button>
 
-                                    <div
-                                        class="cert-student-name"
-                                        id="outStudent"
-                                    >
-                                        اسم الطالب
-                                    </div>
+                        </div>
 
-                                    <div class="cert-description">
-
-                                        تقديرًا لجهوده المتميزة في
-
-                                        <span
-                                            class="cert-course"
-                                            id="outCourse"
-                                        >
-                                            اللغة العربية
-                                        </span>
-
-                                        <div
-                                            id="outAchievement"
-                                            style="margin-top: 5px;"
-                                        >
-                                            وإتمام متطلبات التعلّم
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="cert-quote"
-                                        id="outDescription"
-                                    >
-                                        تقديرًا لاجتهاده ومثابرته، وما بذله
-                                        من جهد في سبيل العلم.
-                                    </div>
-
-                                    <div
-                                        class="cert-stats"
-                                        id="outStats"
-                                    >
-
-                                        <div class="cert-stat">
-                                            <span class="cert-stat-label">
-                                                الدرجة
-                                            </span>
-
-                                            <span
-                                                class="cert-stat-value"
-                                                id="outGrade"
-                                            >
-                                                —
-                                            </span>
-                                        </div>
-
-                                        <div class="cert-stat">
-                                            <span class="cert-stat-label">
-                                                نسبة النجاح
-                                            </span>
-
-                                            <span
-                                                class="cert-stat-value"
-                                                id="outPercentage"
-                                            >
-                                                —
-                                            </span>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="cert-footer">
-
-                                    <div class="cert-signature">
-
-                                        <div class="signature-line"></div>
-
-                                        <div class="signature-title">
-                                            توقيع المدرس
-                                        </div>
-
-                                        <div
-                                            class="signature-name"
-                                            id="outSignature"
-                                        >
-                                            الأستاذ محمد عيسى
-                                        </div>
-
-                                    </div>
-
-                                    <div class="teacher-box">
-
-                                        <div class="teacher-image-wrap">
-
-                                            <img
-                                                src="./mo.png"
-                                                alt="صورة الأستاذ"
-                                                class="teacher-image"
-                                                crossorigin="anonymous"
-                                            >
-
-                                        </div>
-
-                                        <div
-                                            class="teacher-name"
-                                            id="outTeacher"
-                                        >
-                                            الأستاذ محمد عيسى
-                                        </div>
-
-                                        <div
-                                            class="teacher-role"
-                                            id="outRole"
-                                        >
-                                            مدرس اللغة العربية
-                                        </div>
-
-                                    </div>
-
-                                    <div class="cert-issue">
-
-                                        <div class="issue-label">
-                                            تاريخ الإصدار
-                                        </div>
-
-                                        <div
-                                            class="issue-date"
-                                            id="outDate"
-                                        >
-                                            —
-                                        </div>
-
-                                        <div
-                                            class="cert-number"
-                                            id="outNumber"
-                                        >
-                                            CERT-001
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </article>
+                        <div class="notice">
+                            أدخل بيانات الإنجاز والدرجات الفعلية.
+                            هذا المولّد لا يتحقق تلقائيًا من نجاح
+                            الطالب في الاختبارات.
+                        </div>
 
                     </div>
 
-                </div>
+                </aside>
+
+                <!-- الشهادة -->
+
+                <section class="panel">
+
+                    <div class="preview-top">
+
+                        <div>
+                            <h3>معاينة الشهادة</h3>
+                            <p>التغييرات تظهر فورًا.</p>
+                        </div>
+
+                        <div class="preview-tag">
+                            PNG · جودة عالية
+                        </div>
+
+                    </div>
+
+                    <div class="preview-area">
+
+                        <div id="certificateViewport">
+
+                            <article id="certificate">
+
+                                <img
+                                    class="cert-bg"
+                                    src="./sayed.png"
+                                    alt=""
+                                >
+
+                                <div class="cert-overlay"></div>
+
+                                <div class="cert-inner">
+
+                                    <div class="cert-topline">
+                                        شهادة إنجاز وتقدير
+                                    </div>
+
+                                    <h2
+                                        class="cert-title"
+                                        id="outType"
+                                    >
+                                        شهادة تقدير وتميّز
+                                    </h2>
+
+                                    <div class="cert-subtitle">
+                                        تقديرًا للعلم والاجتهاد والمثابرة
+                                    </div>
+
+                                    <div class="cert-divider"></div>
+
+                                    <div class="cert-body">
+
+                                        <div class="cert-intro">
+                                            بكل فخر واعتزاز، تُمنح هذه الشهادة إلى
+                                        </div>
+
+                                        <div
+                                            class="cert-student"
+                                            id="outStudent"
+                                        >
+                                            اسم الطالب
+                                        </div>
+
+                                        <div class="cert-description">
+
+                                            تقديرًا لجهوده المتميزة في
+
+                                            <span
+                                                class="cert-course"
+                                                id="outCourse"
+                                            >
+                                                اللغة العربية
+                                            </span>
+
+                                            <div
+                                                class="cert-achievement"
+                                                id="outAchievement"
+                                            >
+                                                إتمام متطلبات التعلّم
+                                            </div>
+
+                                        </div>
+
+                                        <div
+                                            class="cert-quote"
+                                            id="outDescription"
+                                        >
+                                            تقديرًا لاجتهاده ومثابرته،
+                                            مع أطيب التمنيات له بالنجاح.
+                                        </div>
+
+                                        <div
+                                            class="cert-stats"
+                                            id="outStats"
+                                        >
+
+                                            <div class="cert-stat">
+                                                <span class="cert-stat-label">
+                                                    الدرجة
+                                                </span>
+
+                                                <span
+                                                    class="cert-stat-value"
+                                                    id="outGrade"
+                                                >—</span>
+                                            </div>
+
+                                            <div class="cert-stat">
+                                                <span class="cert-stat-label">
+                                                    نسبة النجاح
+                                                </span>
+
+                                                <span
+                                                    class="cert-stat-value"
+                                                    id="outPercentage"
+                                                >—</span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cert-footer">
+
+                                        <div class="cert-signature">
+
+                                            <div class="signature-line"></div>
+
+                                            <div class="signature-title">
+                                                توقيع المدرس
+                                            </div>
+
+                                            <div
+                                                class="signature-name"
+                                                id="outSignature"
+                                            >
+                                                الأستاذ محمد عيسى
+                                            </div>
+
+                                        </div>
+
+                                        <div class="teacher-box">
+
+                                            <div class="teacher-image-wrap">
+
+                                                <img
+                                                    src="./mo.png"
+                                                    alt="الأستاذ محمد عيسى"
+                                                    class="teacher-image"
+                                                >
+
+                                            </div>
+
+                                            <div
+                                                class="teacher-name"
+                                                id="outTeacher"
+                                            >
+                                                الأستاذ محمد عيسى
+                                            </div>
+
+                                            <div
+                                                class="teacher-role"
+                                                id="outRole"
+                                            >
+                                                مدرس اللغة العربية
+                                            </div>
+
+                                        </div>
+
+                                        <div class="cert-issue">
+
+                                            <div class="issue-label">
+                                                تاريخ الإصدار
+                                            </div>
+
+                                            <div
+                                                class="issue-date"
+                                                id="outDate"
+                                            >—</div>
+
+                                            <div
+                                                class="cert-number"
+                                                id="outNumber"
+                                            >CERT-001</div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                    </div>
+
+                </section>
 
             </section>
 
-        </section>
+            <footer class="footer">
+                صُمّم ليمنح كل إنجاز قيمته التي يستحقها.
+                <br>
+                <strong>نظام الشهادات · الأستاذ محمد عيسى</strong>
+            </footer>
 
-        <footer class="footer">
-            صُمّم ليمنح كل إنجاز قيمته التي يستحقها.
-            <br>
-            <strong>نظام الشهادات · الأستاذ محمد عيسى</strong>
-        </footer>
+        </main>
 
-    </main>
+    </div>
 
-    <div
-        class="toast"
-        id="toast"
-        role="status"
-        aria-live="polite"
-    ></div>
+    <div id="toast" role="status" aria-live="polite"></div>
 
     <script>
         "use strict";
 
-        const $ = (id) => document.getElementById(id);
+        const $ = id => document.getElementById(id);
 
-        const certificate = $("certificate");
-        const viewport = $("certificateViewport");
+        /*
+         * تنبيه:
+         * كلمة المرور هنا لقفل الواجهة فقط.
+         * لا تعتبر مصادقة آمنة لأن الكود يعمل في المتصفح.
+         */
 
-        const BASE_WIDTH = 1400;
-        const BASE_HEIGHT = 990;
+        const ACCESS_PASSWORD = "77774444";
 
-        let toastTimer = null;
-        let resizeTimer = null;
+        const CERT_WIDTH = 1400;
+        const CERT_HEIGHT = 990;
 
-        const inputIds = [
+        let toastTimer;
+        let resizeTimer;
+
+        const formIds = [
             "studentName",
             "certificateType",
             "courseName",
-            "description",
             "achievement",
+            "description",
             "grade",
             "percentage",
             "showGrade",
@@ -1444,22 +1523,21 @@
             "signature"
         ];
 
-        function showToast(message, type = "") {
-            const toast = $("toast");
+        function toast(message, type = "") {
+            const element = $("toast");
 
-            toast.textContent = message;
-            toast.className = "toast show " + type;
+            element.textContent = message;
+            element.className = "show " + type;
 
             clearTimeout(toastTimer);
 
             toastTimer = setTimeout(() => {
-                toast.className = "toast";
+                element.className = "";
             }, 3500);
         }
 
-        function valueOf(id, fallback = "—") {
+        function getValue(id, fallback = "—") {
             const value = $(id).value.trim();
-
             return value || fallback;
         }
 
@@ -1468,39 +1546,149 @@
         }
 
         function formatDate(value) {
-            if (!value) {
-                return "—";
-            }
+            if (!value) return "—";
 
             const parts = value.split("-");
 
-            if (parts.length !== 3) {
-                return value;
-            }
+            if (parts.length !== 3) return value;
 
             return `${parts[2]} / ${parts[1]} / ${parts[0]}`;
         }
+
+        /* =========================
+           الدخول
+        ========================= */
+
+        function unlockApp() {
+            $("lockScreen").style.display = "none";
+            $("app").style.display = "block";
+
+            requestAnimationFrame(() => {
+                fitCertificate();
+                updateCertificate();
+            });
+
+            $("passwordInput").value = "";
+        }
+
+        function lockApp() {
+            $("app").style.display = "none";
+            $("lockScreen").style.display = "flex";
+            $("passwordInput").value = "";
+            $("loginError").style.display = "none";
+        }
+
+        $("loginForm").addEventListener("submit", event => {
+            event.preventDefault();
+
+            const entered = $("passwordInput").value;
+
+            if (entered === ACCESS_PASSWORD) {
+                unlockApp();
+                toast("تم فتح النظام.", "success");
+            } else {
+                $("loginError").style.display = "block";
+                $("passwordInput").value = "";
+                $("passwordInput").focus();
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(150);
+                }
+            }
+        });
+
+        $("logoutBtn").addEventListener("click", () => {
+            lockApp();
+        });
+
+        /*
+         * تجربة WebAuthn:
+         * تطلب المصادقة الحيوية من الجهاز إن كانت مدعومة.
+         *
+         * لا تُستخدم هذه النتيجة وحدها لإثبات هوية المستخدم؛
+         * المصادقة الحقيقية تتطلب تحديًا من الخادم والتحقق
+         * من التوقيع والاعتماد المسجل على الخادم.
+         */
+
+        $("biometricBtn").addEventListener("click", async () => {
+
+            if (!window.isSecureContext) {
+                toast(
+                    "البصمة تتطلب HTTPS أو localhost.",
+                    "error"
+                );
+                return;
+            }
+
+            if (
+                !window.PublicKeyCredential ||
+                !navigator.credentials
+            ) {
+                toast(
+                    "هذا المتصفح لا يدعم WebAuthn.",
+                    "error"
+                );
+                return;
+            }
+
+            try {
+                const available =
+                    await PublicKeyCredential
+                        .isUserVerifyingPlatformAuthenticatorAvailable();
+
+                if (!available) {
+                    toast(
+                        "لا توجد وسيلة مصادقة حيوية مدعومة على هذا الجهاز.",
+                        "error"
+                    );
+                    return;
+                }
+
+                /*
+                 * لا نستدعي credentials.get ببيانات مختلقة.
+                 * لا توجد هنا بيانات اعتماد مسجلة أو تحدٍّ موثوق
+                 * من خادم، ولذلك لن نفتح النظام بالبصمة وحدها.
+                 */
+
+                toast(
+                    "دعم الجهاز متاح، لكن تفعيل الدخول الآمن بالبصمة يحتاج إعداد WebAuthn على الخادم.",
+                    "error"
+                );
+
+            } catch (error) {
+                console.error(error);
+
+                toast(
+                    "تعذّر التحقق من دعم البصمة.",
+                    "error"
+                );
+            }
+        });
+
+        /* =========================
+           الشهادة
+        ========================= */
 
         function updateCertificate() {
 
             setText(
                 "outStudent",
-                valueOf("studentName", "اسم الطالب")
+                getValue("studentName", "اسم الطالب")
             );
 
             setText(
                 "outType",
-                valueOf("certificateType", "شهادة تقدير")
+                getValue("certificateType", "شهادة تقدير")
             );
 
             setText(
                 "outCourse",
-                valueOf("courseName", "المادة أو الدورة")
+                getValue("courseName", "المادة أو الدورة")
             );
 
             setText(
                 "outAchievement",
-                valueOf(
+                getValue(
                     "achievement",
                     "الاجتهاد والمثابرة في التعلّم"
                 )
@@ -1508,25 +1696,35 @@
 
             setText(
                 "outDescription",
-                valueOf(
+                getValue(
                     "description",
                     "مع أطيب التمنيات بمزيد من النجاح والتفوّق."
                 )
             );
 
             setText(
+                "outGrade",
+                getValue("grade", "—")
+            );
+
+            setText(
+                "outPercentage",
+                getValue("percentage", "—")
+            );
+
+            setText(
                 "outTeacher",
-                valueOf("teacherName", "الأستاذ محمد عيسى")
+                getValue("teacherName", "الأستاذ محمد عيسى")
             );
 
             setText(
                 "outRole",
-                valueOf("teacherRole", "مدرس")
+                getValue("teacherRole", "مدرس")
             );
 
             setText(
                 "outSignature",
-                valueOf("signature", "توقيع المدرس")
+                getValue("signature", "توقيع المدرس")
             );
 
             setText(
@@ -1536,17 +1734,7 @@
 
             setText(
                 "outNumber",
-                valueOf("certificateNumber", "")
-            );
-
-            setText(
-                "outGrade",
-                valueOf("grade", "—")
-            );
-
-            setText(
-                "outPercentage",
-                valueOf("percentage", "—")
+                getValue("certificateNumber", "")
             );
 
             $("outStats").style.display =
@@ -1556,15 +1744,16 @@
         }
 
         /*
-         * ضبط المعاينة باستخدام CSS transform.
-         * لا نغيّر المقاس الأصلي عند التصدير.
+         * تغيير حجم المعاينة فقط.
+         * يظل المقاس الأصلي ثابتًا عند التصدير.
          */
 
         function fitCertificate() {
 
-            if (!viewport || !certificate) {
-                return;
-            }
+            const viewport = $("certificateViewport");
+            const cert = $("certificate");
+
+            if (!viewport || !cert) return;
 
             const availableWidth = Math.max(
                 100,
@@ -1573,27 +1762,27 @@
 
             const scale = Math.min(
                 1,
-                availableWidth / BASE_WIDTH
+                availableWidth / CERT_WIDTH
             );
 
-            certificate.style.transform =
-                `scale(${scale})`;
+            cert.style.transform = `scale(${scale})`;
 
             viewport.style.height =
-                `${BASE_HEIGHT * scale}px`;
+                `${CERT_HEIGHT * scale}px`;
         }
 
         function waitForImage(img) {
-            return new Promise((resolve) => {
 
-                if (img.complete && img.naturalWidth > 0) {
-                    resolve(true);
+            return new Promise(resolve => {
+
+                if (img.complete) {
+                    resolve(img.naturalWidth > 0);
                     return;
                 }
 
                 const timer = setTimeout(() => {
                     resolve(false);
-                }, 8000);
+                }, 10000);
 
                 img.addEventListener("load", () => {
                     clearTimeout(timer);
@@ -1604,27 +1793,17 @@
                     clearTimeout(timer);
                     resolve(false);
                 }, { once: true });
-
             });
         }
 
         async function downloadCertificate() {
 
             const button = $("downloadBtn");
-
-            if (typeof window.html2canvas !== "function") {
-                showToast(
-                    "مكتبة التصدير لم تُحمّل. تحقق من الاتصال بالإنترنت.",
-                    "error"
-                );
-                return;
-            }
-
             const student = $("studentName").value.trim();
 
             if (!student) {
-                showToast(
-                    "اكتب اسم الطالب قبل تحميل الشهادة.",
+                toast(
+                    "اكتب اسم الطالب أولًا.",
                     "error"
                 );
 
@@ -1632,66 +1811,66 @@
                 return;
             }
 
-            const images = [
-                ...certificate.querySelectorAll("img")
-            ];
+            if (typeof window.html2canvas !== "function") {
+                toast(
+                    "تعذّر تحميل مكتبة إنشاء الصور.",
+                    "error"
+                );
+                return;
+            }
 
             button.disabled = true;
             button.textContent = "جارٍ تجهيز الشهادة...";
 
             try {
 
-                const results = await Promise.all(
+                const images = [
+                    ...$("certificate").querySelectorAll("img")
+                ];
+
+                const loaded = await Promise.all(
                     images.map(waitForImage)
                 );
 
-                if (results.some(result => !result)) {
+                if (loaded.some(ok => !ok)) {
                     throw new Error(
-                        "تعذّر تحميل إحدى الصور. تأكد من وجود sayed.png و mo.png."
+                        "تأكد من وجود sayed.png و mo.png في مجلد الموقع."
                     );
                 }
 
-                /*
-                 * تحميل الخطوط قبل التصوير حتى لا يظهر
-                 * النص بخط مختلف في ملف PNG.
-                 */
-
-                if (document.fonts && document.fonts.ready) {
+                if (document.fonts?.ready) {
                     await document.fonts.ready;
                 }
 
-                /*
-                 * html2canvas يصوّر العنصر بمقاسه الأصلي.
-                 * لا نحتاج إلى إزالة مقياس المعاينة.
-                 */
+                const canvas = await html2canvas(
+                    $("certificate"),
+                    {
+                        scale: 2,
+                        width: CERT_WIDTH,
+                        height: CERT_HEIGHT,
+                        backgroundColor: "#ffffff",
+                        useCORS: true,
+                        allowTaint: false,
+                        logging: false,
+                        imageTimeout: 10000
+                    }
+                );
 
-                const canvas = await html2canvas(certificate, {
-                    scale: 2,
-                    width: BASE_WIDTH,
-                    height: BASE_HEIGHT,
-                    backgroundColor: "#ffffff",
-                    useCORS: true,
-                    allowTaint: false,
-                    logging: false,
-                    imageTimeout: 10000,
-                    removeContainer: true
-                });
-
-                const blob = await new Promise((resolve, reject) => {
-
-                    canvas.toBlob((result) => {
-
-                        if (!result) {
-                            reject(
-                                new Error("تعذّر إنشاء صورة الشهادة.")
-                            );
-                            return;
-                        }
-
-                        resolve(result);
-
-                    }, "image/png");
-                });
+                const blob = await new Promise(
+                    (resolve, reject) => {
+                        canvas.toBlob(result => {
+                            if (result) {
+                                resolve(result);
+                            } else {
+                                reject(
+                                    new Error(
+                                        "تعذّر إنشاء ملف PNG."
+                                    )
+                                );
+                            }
+                        }, "image/png");
+                    }
+                );
 
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
@@ -1699,7 +1878,7 @@
                 const safeName = student
                     .replace(/[\\/:*?"<>|]/g, "-")
                     .replace(/\s+/g, "_")
-                    .slice(0, 90);
+                    .slice(0, 80);
 
                 link.href = url;
                 link.download = `شهادة_${safeName}.png`;
@@ -1712,16 +1891,16 @@
                     URL.revokeObjectURL(url);
                 }, 30000);
 
-                showToast(
-                    "تم إنشاء الشهادة وتحميلها بنجاح.",
+                toast(
+                    "تم تحميل الشهادة بنجاح.",
                     "success"
                 );
 
             } catch (error) {
 
-                console.error("Certificate export error:", error);
+                console.error(error);
 
-                showToast(
+                toast(
                     error.message ||
                     "حدث خطأ أثناء إنشاء الشهادة.",
                     "error"
@@ -1730,174 +1909,91 @@
             } finally {
 
                 button.disabled = false;
-
-                button.innerHTML =
-                    "<span>⬇️</span> تحميل الشهادة بجودة عالية";
+                button.textContent = "⬇️ تحميل الشهادة PNG";
 
             }
         }
 
-        function printCertificate() {
+        $("downloadBtn").addEventListener(
+            "click",
+            downloadCertificate
+        );
 
-            const student = $("studentName").value.trim();
+        $("printBtn").addEventListener(
+            "click",
+            () => {
+                if (!$("studentName").value.trim()) {
+                    toast(
+                        "اكتب اسم الطالب أولًا.",
+                        "error"
+                    );
+                    return;
+                }
 
-            if (!student) {
-                showToast(
-                    "اكتب اسم الطالب أولًا.",
-                    "error"
-                );
+                window.print();
+            }
+        );
+
+        $("resetBtn").addEventListener("click", () => {
+
+            if (!confirm("هل تريد إعادة البيانات الافتراضية؟")) {
                 return;
             }
 
-            window.print();
-        }
-
-        function resetForm() {
-
-            const confirmed = window.confirm(
-                "هل تريد إعادة بيانات الشهادة إلى القيم الافتراضية؟"
-            );
-
-            if (!confirmed) {
-                return;
-            }
-
-            $("studentName").value = "اسم الطالب";
-
+            $("studentName").value = "";
             $("certificateType").value =
                 "شهادة تقدير وتميّز";
 
             $("courseName").value = "اللغة العربية";
 
-            $("description").value =
-                "تقديرًا لاجتهاده ومثابرته، وما بذله من جهد في سبيل العلم، وإصراره على التعلّم والتقدّم. مع أطيب التمنيات له بمزيد من النجاح والتفوّق.";
-
             $("achievement").value =
                 "إتمام متطلبات التعلّم";
 
+            $("description").value =
+                "تقديرًا لاجتهاده ومثابرته، وما بذله من جهد في سبيل العلم، وإصراره على التعلّم والتقدّم، مع أطيب التمنيات له بمزيد من النجاح والتفوّق.";
+
             $("grade").value = "";
             $("percentage").value = "";
-
             $("showGrade").checked = true;
 
             $("issueDate").value =
                 new Date().toLocaleDateString("en-CA");
 
             $("certificateNumber").value = "CERT-001";
-
-            $("teacherName").value =
-                "الأستاذ محمد عيسى";
-
-            $("teacherRole").value =
-                "مدرس اللغة العربية";
-
-            $("signature").value =
-                "الأستاذ محمد عيسى";
+            $("teacherName").value = "الأستاذ محمد عيسى";
+            $("teacherRole").value = "مدرس اللغة العربية";
+            $("signature").value = "الأستاذ محمد عيسى";
 
             updateCertificate();
 
-            showToast(
-                "تمت إعادة البيانات الافتراضية.",
+            toast(
+                "تمت إعادة البيانات.",
                 "success"
             );
-        }
+        });
 
-        /*
-         * تشغيل الصفحة
-         */
+        formIds.forEach(id => {
+            $(id).addEventListener("input", updateCertificate);
+            $(id).addEventListener("change", updateCertificate);
+        });
 
-        function initialize() {
+        window.addEventListener("resize", () => {
+            clearTimeout(resizeTimer);
 
-            $("issueDate").value =
-                new Date().toLocaleDateString("en-CA");
-
-            inputIds.forEach(id => {
-
-                const element = $(id);
-
-                element.addEventListener(
-                    "input",
-                    updateCertificate
-                );
-
-                element.addEventListener(
-                    "change",
-                    updateCertificate
-                );
-            });
-
-            $("downloadBtn").addEventListener(
-                "click",
-                downloadCertificate
+            resizeTimer = setTimeout(
+                fitCertificate,
+                80
             );
+        });
 
-            $("printBtn").addEventListener(
-                "click",
-                printCertificate
-            );
+        /* تهيئة الصفحة */
 
-            $("resetBtn").addEventListener(
-                "click",
-                resetForm
-            );
+        $("issueDate").value =
+            new Date().toLocaleDateString("en-CA");
 
-            window.addEventListener("resize", () => {
+        updateCertificate();
 
-                clearTimeout(resizeTimer);
-
-                resizeTimer = setTimeout(
-                    fitCertificate,
-                    80
-                );
-            });
-
-            updateCertificate();
-
-            Promise.all([
-                waitForImage(
-                    certificate.querySelector(
-                        ".certificate-background"
-                    )
-                ),
-                waitForImage(
-                    certificate.querySelector(
-                        ".teacher-image"
-                    )
-                )
-            ]).then(([backgroundLoaded, teacherLoaded]) => {
-
-                if (!backgroundLoaded) {
-                    showToast(
-                        "لم يتم العثور على sayed.png. تأكد من وجود خلفية الشهادة.",
-                        "error"
-                    );
-                }
-
-                if (!teacherLoaded) {
-                    console.warn(
-                        "تعذّر تحميل صورة المدرس mo.png"
-                    );
-                }
-
-            });
-        }
-
-        if (document.readyState === "loading") {
-
-            document.addEventListener(
-                "DOMContentLoaded",
-                initialize
-            );
-
-        } else {
-
-            initialize();
-        }
-
-        /*
-         * تسجيل Service Worker عند تشغيل الموقع
-         * على HTTPS أو localhost.
-         */
+        /* دعم PWA */
 
         if (
             "serviceWorker" in navigator &&
@@ -1907,94 +2003,18 @@
                 location.hostname === "127.0.0.1"
             )
         ) {
-
             window.addEventListener("load", () => {
-
-                navigator.serviceWorker.register("./sw.js")
+                navigator.serviceWorker
+                    .register("./sw.js")
                     .catch(error => {
                         console.warn(
-                            "Service Worker registration failed:",
+                            "Service Worker:",
                             error
                         );
                     });
-
             });
         }
-
     </script>
-
-    <style>
-        @media print {
-
-            @page {
-                size: A4 landscape;
-                margin: 0;
-            }
-
-            html,
-            body {
-                width: 297mm;
-                height: 210mm;
-                min-height: 0;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                overflow: hidden !important;
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .page {
-                width: 297mm !important;
-                max-width: none !important;
-                height: 210mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .header,
-            .hero,
-            .workspace > aside,
-            .preview-top,
-            .footer,
-            .toast {
-                display: none !important;
-            }
-
-            .workspace {
-                display: block !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .preview-panel,
-            .preview-area,
-            .certificate-viewport {
-                display: block !important;
-                width: 297mm !important;
-                height: 210mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                overflow: hidden !important;
-                border: 0 !important;
-                border-radius: 0 !important;
-                background: white !important;
-                box-shadow: none !important;
-            }
-
-            #certificate {
-                position: absolute !important;
-                top: 0 !important;
-                right: 0 !important;
-                width: 1400px !important;
-                height: 990px !important;
-                margin: 0 !important;
-                transform: scale(0.797) !important;
-                transform-origin: top right !important;
-                box-shadow: none !important;
-            }
-        }
-    </style>
 
 </body>
 </html>
