@@ -4,132 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0A2342">
-    <title>الشهادات الرسمية</title>
+    <title>نظام توليد الشهادات | الأستاذ محمد عيسى</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --navy: #0A2342;
+            --primary: #0A2342;
+            --primary-light: #1E3A8A;
             --gold: #D4AF37;
-            --light-blue: #4A90E2;
-            --text-dark: #222;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(212, 175, 55, 0.3);
+            --bg-dark: #0B1120;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --shadow-glass: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: #f4f6f9; 
-            color: #333; 
+            background-color: var(--bg-dark); 
+            background-image: radial-gradient(circle at 10% 20%, var(--primary-light) 0%, transparent 40%), radial-gradient(circle at 90% 80%, #4F46E5 0%, transparent 40%);
+            color: var(--text-main); 
             min-height: 100vh; 
             overflow-x: hidden; 
             display: flex; 
             flex-direction: column;
         }
 
-        #loader { position: fixed; inset: 0; background: var(--navy); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        #loader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(212, 175, 55, 0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 15px 30px; border-radius: 50px; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10001; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--bg-card); backdrop-filter: blur(10px); color: #fff; padding: 15px 30px; border-radius: 50px; border: 1px solid var(--gold); box-shadow: var(--shadow-glass); z-index: 10001; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 700; display: flex; align-items: center; gap: 10px; }
         #toast.show { top: 20px; }
-        #toast.error { border-color: #ff4757; }
-        #toast.success { border-color: #2ed573; }
+        #toast.error { border-color: #ef4444; background: rgba(239, 68, 68, 0.9); }
+        #toast.success { border-color: #10b981; background: rgba(16, 185, 129, 0.9); }
 
-        #lockScreen { position: fixed; inset: 0; background: rgba(10, 35, 66, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
-        .lock-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 30px; padding: 40px 25px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; color: #fff; }
+        #lockScreen { position: fixed; inset: 0; background: rgba(11, 17, 32, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
+        .lock-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 30px; padding: 40px 30px; width: 100%; max-width: 420px; text-align: center; box-shadow: var(--shadow-glass); position: relative; overflow: hidden; }
         .lock-icon { width: 80px; height: 80px; fill: var(--gold); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
-        .lock-card h2 { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); margin-bottom: 10px; }
-        .lock-card p { font-size: 14px; color: #a0aec0; margin-bottom: 30px; }
+        .lock-card h2 { font-family: 'Amiri', serif; font-size: 30px; color: var(--gold); margin-bottom: 10px; }
+        .lock-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; }
         .input-box { position: relative; margin-bottom: 20px; }
-        .input-box input { width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; font-size: 22px; text-align: center; letter-spacing: 10px; outline: none; transition: 0.3s; }
+        .input-box input { width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 2px solid var(--border-glass); border-radius: 15px; color: #fff; font-size: 22px; text-align: center; letter-spacing: 10px; outline: none; transition: 0.3s; font-weight: 700; }
         .input-box input:focus { border-color: var(--gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; margin-bottom: 15px; }
-        .btn-primary { background: var(--gold); color: var(--navy); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+        .btn-primary { background: var(--gold); color: var(--primary); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+        .btn-primary:hover { background: #F3E5AB; transform: translateY(-2px); }
         .btn-outline { background: transparent; border: 2px solid var(--gold); color: var(--gold); }
+        .btn-outline:hover { background: rgba(212, 175, 55, 0.1); }
         .btn svg { width: 24px; height: 24px; fill: currentColor; }
 
-        #app { display: none; flex-direction: column; width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; opacity: 0; transition: opacity 0.5s; }
-        .top-bar { background: #fff; border: 1px solid #ddd; border-radius: 20px; padding: 20px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .input-group { flex: 1; min-width: 200px; }
-        .input-group label { display: block; font-size: 13px; color: var(--navy); margin-bottom: 8px; font-weight: 700; }
-        .input-group input { width: 100%; padding: 12px 15px; background: #f9f9f9; border: 1px solid #ccc; border-radius: 10px; color: #333; font-size: 16px; outline: none; transition: 0.3s; }
-        .input-group input:focus { border-color: var(--gold); background: #fff; }
-        .action-btn { padding: 0 25px; border-radius: 10px; background: var(--navy); color: var(--gold); font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; font-size: 16px; }
-        .action-btn:hover { background: #15365f; box-shadow: 0 0 20px rgba(10, 35, 66, 0.4); }
+        #app { display: none; flex-direction: column; width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; opacity: 0; transition: opacity 0.5s; }
+        
+        .dashboard { display: grid; grid-template-columns: 350px 1fr; gap: 20px; align-items: start; }
+        @media (max-width: 1024px) { .dashboard { grid-template-columns: 1fr; } }
 
-        .cert-container { width: 100%; overflow: hidden; display: flex; justify-content: center; padding: 10px 0; }
+        .control-panel { background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 20px; padding: 25px; box-shadow: var(--shadow-glass); position: sticky; top: 20px; }
+        .control-panel h3 { font-family: 'Amiri', serif; font-size: 24px; color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 10px; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        .input-group input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 10px; color: #fff; font-size: 15px; outline: none; transition: 0.3s; font-family: 'Cairo', sans-serif; }
+        .input-group input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); }
+        
+        .action-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(135deg, #D4AF37, #B8860B); color: #fff; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; font-size: 16px; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .action-btn:hover { box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
+
+        .preview-area { overflow: hidden; display: flex; justify-content: center; padding: 20px; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-glass); box-shadow: var(--shadow-glass); }
         
         #certificate { 
             width: 1000px; 
             height: 707px; 
-            background: #ffffff; 
+            background-image: url('sayed.png'); 
+            background-size: 100% 100%; 
+            background-position: center; 
+            background-repeat: no-repeat;
             position: relative; 
             flex-shrink: 0; 
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
-        @media (max-width: 1050px) {
-            #certificate { transform: scale(0.75); transform-origin: top center; margin-bottom: -90px; }
+        @media (max-width: 1300px) {
+            #certificate { transform: scale(0.85); transform-origin: top center; margin-bottom: -100px; }
+        }
+        @media (max-width: 1024px) {
+            #certificate { transform: scale(0.7); transform-origin: top center; margin-bottom: -210px; }
         }
         @media (max-width: 768px) {
-            #certificate { transform: scale(0.5); transform-origin: top center; margin-bottom: -180px; }
+            #certificate { transform: scale(0.5); transform-origin: top center; margin-bottom: -350px; }
         }
         @media (max-width: 480px) {
-            #certificate { transform: scale(0.35); transform-origin: top center; margin-bottom: -270px; }
+            #certificate { transform: scale(0.35); transform-origin: top center; margin-bottom: -460px; }
         }
 
-        .cert-bg-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-
-        .cert-content { position: relative; z-index: 1; padding: 40px 60px; height: 100%; display: flex; flex-direction: column; }
-
-        .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        .header-right { text-align: center; }
-        .header-left { text-align: center; }
-        .header-text { font-size: 14px; font-weight: 700; color: var(--navy); line-height: 1.4; margin-top: 5px; }
-        .logo-svg { height: 60px; width: auto; }
-
-        .cert-body { text-align: center; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -20px; }
-        .cert-title { font-family: 'Amiri', serif; font-size: 42px; font-weight: 700; color: var(--navy); margin-bottom: 30px; }
-        .cert-text { font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.8; margin-bottom: 15px; }
-        .cert-name { font-size: 26px; font-weight: 900; color: var(--light-blue); margin: 0 10px; }
-        .cert-course { font-size: 22px; font-weight: 900; color: var(--light-blue); margin: 0 10px; }
-        .cert-date { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-top: 10px; }
-
-        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 20px; }
-        .sign-box { text-align: center; width: 250px; }
-        .sign-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
-        .sign-name { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 15px; font-family: 'Amiri', serif; }
-        .sign-line { width: 150px; border-bottom: 2px dotted #666; margin: 0 auto; height: 30px; position: relative; }
-        .sign-graphic { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 100px; opacity: 0.8; }
+        .cert-content { position: absolute; inset: 0; padding: 60px 80px; display: flex; flex-direction: column; text-align: center; color: #111; }
         
-        .stamp-box { position: relative; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; }
-        .stamp-svg { width: 100%; height: 100%; opacity: 0.8; transform: rotate(-10deg); }
+        .cert-title { font-family: 'Amiri', serif; font-size: 50px; font-weight: 700; color: var(--primary); margin-top: 30px; margin-bottom: 40px; }
+        
+        .cert-body { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 15px; }
+        .cert-text { font-size: 22px; font-weight: 700; color: #333; line-height: 1.6; }
+        
+        .cert-student-name { font-family: 'Amiri', serif; font-size: 55px; font-weight: 700; color: var(--primary); margin: 10px 0; display: inline-block; padding: 0 40px; border-bottom: 2px dashed var(--gold); }
+        
+        .cert-course { font-size: 28px; font-weight: 900; color: var(--primary-light); margin: 0 10px; }
+        
+        .cert-dates { display: flex; justify-content: center; gap: 30px; margin-top: 10px; font-size: 18px; font-weight: 700; color: #444; }
+        .cert-dates span { background: rgba(10, 35, 66, 0.05); padding: 5px 15px; border-radius: 8px; border: 1px solid rgba(10, 35, 66, 0.1); }
+        
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px; margin-bottom: 20px; }
+        
+        .teacher-area { display: flex; flex-direction: column; align-items: center; width: 250px; }
+        .img-wrapper { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--gold); overflow: hidden; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-bottom: -15px; z-index: 2; }
+        .teacher-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .teacher-info { background: var(--primary); color: #fff; padding: 20px 20px 10px 20px; border-radius: 40px; border: 2px solid var(--gold); text-align: center; z-index: 1; width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .teacher-name { font-family: 'Amiri', serif; font-size: 20px; color: var(--gold); font-weight: 700; margin-bottom: 2px; }
+        .teacher-role { font-size: 13px; color: #ddd; }
 
-        .bottom-bar { text-align: center; font-size: 12px; color: var(--navy); font-weight: 700; margin-top: auto; }
+        .sign-area { display: flex; flex-direction: column; align-items: center; width: 200px; }
+        .sign-line { width: 100%; border-bottom: 2px solid #333; margin-bottom: 10px; height: 40px; }
+        .sign-text { font-size: 16px; font-weight: 700; color: #333; }
     </style>
 </head>
 <body>
 
     <div id="toast"><span id="toastMsg"></span></div>
-
-    <div id="loader">
-        <div class="spinner"></div>
-        <h2 style="color: var(--gold); font-family: 'Amiri', serif;">جاري التحميل...</h2>
-    </div>
+    <div id="loader"><div class="spinner"></div><h2 style="color: var(--gold); font-family: 'Amiri', serif;">جاري التحميل...</h2></div>
 
     <div id="lockScreen">
         <div class="lock-card">
             <svg class="lock-icon" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7V9H5C3.346 9 2 10.346 2 12V20C2 21.654 3.346 23 5 23H19C20.654 23 22 21.654 22 20V12C22 10.346 20.654 9 19 9H18V7C18 3.676 15.324 1 12 1ZM12 3C14.276 3 16 4.724 16 7V9H8V7C8 4.724 9.724 3 12 3ZM12 13C13.105 13 14 13.895 14 15C14 15.74 13.6 16.387 13 16.732V19H11V16.732C10.4 16.387 10 15.74 10 15C10 13.895 10.895 13 12 13Z"/></svg>
-            <h2>الأمان المتقدم</h2>
-            <p>أدخل الرمز السري أو استخدم بصمة الوجه/الإصبع</p>
+            <h2>نظام الحماية</h2>
+            <p>أدخل الرمز السري أو استخدم بصمة الوجه/الإصبع للوصول إلى لوحة التحكم</p>
             <div class="input-box">
-                <input type="password" id="pinInput" placeholder="******" maxlength="6" inputmode="numeric">
+                <input type="password" id="pinInput" placeholder="••••••" maxlength="6" inputmode="numeric">
             </div>
             <button class="btn btn-primary" onclick="verifyPin()">
                 <svg viewBox="0 0 24 24"><path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z"/></svg>
@@ -137,119 +147,85 @@
             </button>
             <button class="btn btn-outline" onclick="handleBiometric()">
                 <svg viewBox="0 0 24 24"><path d="M12 11C9.79 11 8 12.79 8 15C8 17.21 9.79 19 12 19C14.21 19 16 17.21 16 15C16 12.79 14.21 11 12 11ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM12 2C6.48 2 2 6.48 2 12V15C2 18.31 4.69 21 8 21H16C19.31 21 22 18.31 22 15V12C22 6.48 17.52 2 12 2ZM20 15C20 17.21 18.21 19 16 19H8C5.79 19 4 17.21 4 15V12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12V15Z"/></svg>
-                تفعيل / بصمة
+                بصمة الوجه / الإصبع
             </button>
         </div>
     </div>
 
     <div id="app">
-        <div class="top-bar">
-            <div class="input-group">
-                <label>اسم المتدربة</label>
-                <input type="text" id="studentNameInput" value="وداد بنت سعود الحتيبي" oninput="updateCert()">
+        <div class="dashboard">
+            <div class="control-panel">
+                <h3>بيانات الشهادة</h3>
+                <div class="input-group">
+                    <label>اسم الطالب / المتدرب</label>
+                    <input type="text" id="inStudent" value="السيد حسن عيسى" oninput="updateCert()">
+                </div>
+                <div class="input-group">
+                    <label>اسم الدورة / البرنامج</label>
+                    <input type="text" id="inCourse" value="الصف الثالث الثانوي" oninput="updateCert()">
+                </div>
+                <div class="input-group">
+                    <label>تاريخ البداية</label>
+                    <input type="text" id="inStartDate" value="15 / 02 / 2024" oninput="updateCert()">
+                </div>
+                <div class="input-group">
+                    <label>تاريخ النهاية</label>
+                    <input type="text" id="inEndDate" value="17 / 02 / 2024" oninput="updateCert()">
+                </div>
+                <div class="input-group">
+                    <label>عدد الساعات المعتمدة</label>
+                    <input type="text" id="inHours" value="15 ساعة تدريبية" oninput="updateCert()">
+                </div>
+                <div class="input-group">
+                    <label>المدرب / جهة الإصدار</label>
+                    <input type="text" id="inSign" value="توقيع الإدارة" oninput="updateCert()">
+                </div>
+                <button class="action-btn" id="downloadBtn" onclick="downloadCert()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg>
+                    تحميل الشهادة (PNG)
+                </button>
             </div>
-            <div class="input-group">
-                <label>البرنامج التدريبي</label>
-                <input type="text" id="courseInput" value="جغرافيات" oninput="updateCert()">
-            </div>
-            <div class="input-group">
-                <label>الفترة والتاريخ</label>
-                <input type="text" id="dateInput" value="من 15/2/1444هـ إلى 17/2/1444هـ" oninput="updateCert()">
-            </div>
-            <button class="action-btn" id="downloadBtn" onclick="downloadCert()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg>
-                تحميل
-            </button>
-        </div>
 
-        <div class="cert-container">
-            <div id="certificate">
-                
-                <svg class="cert-bg-svg" viewBox="0 0 1000 707" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#D4AF37" />
-                            <stop offset="50%" stop-color="#F3E5AB" />
-                            <stop offset="100%" stop-color="#D4AF37" />
-                        </linearGradient>
-                    </defs>
-                    <rect x="20" y="20" width="960" height="667" fill="none" stroke="url(#goldGrad)" stroke-width="4" rx="15"/>
-                    <rect x="30" y="30" width="940" height="647" fill="none" stroke="#D4AF37" stroke-width="1" rx="10"/>
-                    <path d="M 1000 0 L 850 0 C 820 80, 750 150, 650 150 L 1000 150 Z" fill="#0A2342"/>
-                    <path d="M 1000 150 C 820 150, 750 80, 700 0 L 1000 0 Z" fill="#112d52" opacity="0.8"/>
-                    <path d="M 0 707 L 150 707 C 180 627, 250 557, 350 557 L 0 557 Z" fill="#0A2342"/>
-                    <path d="M 0 557 C 180 557, 250 627, 300 707 L 0 707 Z" fill="#112d52" opacity="0.8"/>
-                    <path d="M 1000 150 C 750 150, 700 0, 700 0" fill="none" stroke="#D4AF37" stroke-width="4"/>
-                    <path d="M 0 557 C 250 557, 300 707, 300 707" fill="none" stroke="#D4AF37" stroke-width="4"/>
-                </svg>
-
-                <div class="cert-content">
-                    <div class="cert-header">
-                        <div class="header-right">
-                            <svg class="logo-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#0A2342"/><path d="M30 50 L70 50 M50 30 L50 70" stroke="#fff" stroke-width="5"/></svg>
-                            <div class="header-text">المملكة العربية السعودية<br>وزارة التعليم<br>الإدارة العامة للتعليم بالمنطقة الشرقية</div>
-                        </div>
-                        <div class="header-left">
-                            <svg class="logo-svg" viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#4A90E2" rx="10"/><path d="M40 40 L60 40 M40 60 L60 60" stroke="#fff" stroke-width="5"/></svg>
-                            <div class="header-text">مبادرة<br>تطوير الموارد البشرية</div>
-                        </div>
-                    </div>
-
-                    <div class="cert-body">
-                        <div class="cert-title">شهادة حضور برنامج تدريبي</div>
+            <div class="preview-area">
+                <div id="certificate">
+                    <div class="cert-content">
+                        <div class="cert-title">شهادة شكر وتقدير</div>
                         
-                        <div class="cert-text">
-                            تشهد إدارة الموارد البشرية بالإدارة العامة للتعليم بالمنطقة الشرقية أن
-                        </div>
-                        <div class="cert-text">
-                            الموظفة / <span class="cert-name" id="certStudentName">وداد بنت سعود الحتيبي</span>
-                        </div>
-                        <div class="cert-text">
-                            قد حضرت البرنامج التدريبي عن بعد <span class="cert-course" id="certCourseName">(جغرافيات)</span>
-                        </div>
-                        <div class="cert-text" style="font-size: 18px;">
-                            بقيادة المدربة / أ. هند الدوسري
-                        </div>
-                        <div class="cert-date">
-                            خلال الفترة (<span id="certDateText">من 15/2/1444هـ إلى 17/2/1444هـ</span>) بواقع ( 15 ) ساعة تدريبية
-                        </div>
-                        <div class="cert-text" style="margin-top: 20px; font-size: 18px;">
-                            راجين لها دوام التوفيق والسداد...
-                        </div>
-                    </div>
-
-                    <div class="cert-footer">
-                        <div class="sign-box">
-                            <div class="sign-title">مديرة وحدة تطوير الموارد البشرية</div>
-                            <div class="sign-name">منال بنت عوض عشوش</div>
-                            <div class="sign-line">
-                                <svg class="sign-graphic" viewBox="0 0 100 50"><path d="M10 40 Q 30 10, 50 40 T 90 40" fill="none" stroke="#0A2342" stroke-width="2"/></svg>
+                        <div class="cert-body">
+                            <div class="cert-text">تُمنح هذه الشهادة بكل فخر واعتزاز إلى</div>
+                            <div class="cert-student-name" id="certStudent">السيد حسن عيسى</div>
+                            <div class="cert-text">
+                                تقديراً لجهوده الاستثنائية وتفوقه الباهر في إتمام<br>
+                                <span class="cert-course" id="certCourse">الصف الثالث الثانوي</span>
+                            </div>
+                            <div class="cert-dates">
+                                <span id="certStart">15 / 02 / 2024</span>
+                                <span style="background: transparent; border: none;">إلى</span>
+                                <span id="certEnd">17 / 02 / 2024</span>
+                            </div>
+                            <div class="cert-text" style="font-size: 18px; margin-top: 10px;">
+                                بواقع <span id="certHours" style="font-weight: 900; color: var(--primary);">15 ساعة تدريبية</span>
                             </div>
                         </div>
 
-                        <div class="stamp-box">
-                            <svg class="stamp-svg" viewBox="0 0 100 100">
-                                <ellipse cx="50" cy="50" rx="45" ry="35" fill="none" stroke="#0A2342" stroke-width="2"/>
-                                <ellipse cx="50" cy="50" rx="40" ry="30" fill="none" stroke="#0A2342" stroke-width="1"/>
-                                <text x="50" y="45" font-size="8" fill="#0A2342" font-weight="bold" text-anchor="middle">ختم إدارة الموارد البشرية</text>
-                                <text x="50" y="60" font-size="6" fill="#0A2342" text-anchor="middle">إدارة التعليم بالمنطقة الشرقية</text>
-                            </svg>
-                        </div>
+                        <div class="cert-footer">
+                            <div class="sign-area">
+                                <div class="sign-line"></div>
+                                <div class="sign-text" id="certSign">توقيع الإدارة</div>
+                            </div>
 
-                        <div class="sign-box">
-                            <div class="sign-title">مدير إدارة الموارد البشرية</div>
-                            <div class="sign-name">عبدالله بن يحيى العيسى</div>
-                            <div class="sign-line">
-                                <svg class="sign-graphic" viewBox="0 0 100 50"><path d="M20 30 C 40 50, 60 10, 80 30" fill="none" stroke="#0A2342" stroke-width="2"/></svg>
+                            <div class="teacher-area">
+                                <div class="img-wrapper">
+                                    <img src="mo.png" alt="المدرب" class="teacher-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23ddd\'/></svg>'">
+                                </div>
+                                <div class="teacher-info">
+                                    <div class="teacher-name">الأستاذ محمد عيسى</div>
+                                    <div class="teacher-role">مدرس اللغة العربية</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="bottom-bar">
-                        hrdu@eduast.gov.sa
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -264,7 +240,8 @@
 
         function showToast(msg, type = 'info') {
             const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
             toast.className = 'show ' + type;
             setTimeout(() => { toast.className = ''; }, 3500);
         }
@@ -283,14 +260,14 @@
 
         async function handleBiometric() {
             if (!window.PublicKeyCredential) { 
-                showToast("جهازك لا يدعم البصمة. استخدم الرمز السري.", "error"); 
+                showToast("جهازك أو متصفحك لا يدعم البصمة. استخدم الرمز السري.", "error"); 
                 return; 
             }
             
             try {
                 const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
                 if (!isAvailable) { 
-                    showToast("لا توجد بصمة مسجلة على الجهاز. استخدم الرمز السري.", "error"); 
+                    showToast("لا توجد بصمة مسجلة على هذا الجهاز. يرجى تفعيل بصمة الشاشة أولاً.", "error"); 
                     return; 
                 }
 
@@ -299,28 +276,42 @@
                 if (!isRegistered) {
                     const challenge = new Uint8Array(32); 
                     crypto.getRandomValues(challenge);
+                    
                     await navigator.credentials.create({
                         publicKey: {
                             challenge: challenge,
-                            rp: { name: "Certificate Portal" },
-                            user: { id: new Uint8Array(16), name: "teacher", displayName: "Teacher" },
+                            rp: { name: "Eissa Certificate Portal" },
+                            user: { id: new Uint8Array(16), name: "admin", displayName: "Admin" },
                             pubKeyCredParams: [{ type: "public-key", alg: -7 }],
                             authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }
                         }
                     });
+                    
                     localStorage.setItem('bio_registered', 'true');
-                    showToast("تم تفعيل البصمة بنجاح!", "success");
+                    showToast("تم تفعيل البصمة بنجاح! يمكنك الدخول الآن.", "success");
                     unlockApp();
                 } else {
                     const challenge = new Uint8Array(32); 
                     crypto.getRandomValues(challenge);
+                    
                     await navigator.credentials.get({ 
-                        publicKey: { challenge: challenge, userVerification: "required" } 
+                        publicKey: { 
+                            challenge: challenge, 
+                            userVerification: "required",
+                            timeout: 60000
+                        } 
                     });
                     unlockApp();
                 }
             } catch (error) {
-                showToast("فشل التحقق البيومتري. يرجى استخدام الرمز السري.", "error");
+                if (error.name === 'NotAllowedError') {
+                    showToast("تم إلغاء التحقق. استخدم الرمز السري.", "error");
+                } else if (error.name === 'InvalidStateError') {
+                    localStorage.removeItem('bio_registered');
+                    showToast("حدث خطأ في البصمة. يرجى إعادة المحاولة للتفعيل.", "error");
+                } else {
+                    showToast("فشل التحقق البيومتري. يرجى استخدام الرمز السري.", "error");
+                }
             }
         }
 
@@ -328,22 +319,26 @@
             const lock = document.getElementById('lockScreen'), app = document.getElementById('app');
             lock.style.opacity = '0';
             setTimeout(() => {
-                lock.style.display = 'none'; app.style.display = 'flex';
+                lock.style.display = 'none'; 
+                app.style.display = 'flex';
                 setTimeout(() => app.style.opacity = '1', 50);
             }, 500);
         }
 
         function updateCert() {
-            document.getElementById('certStudentName').innerText = document.getElementById('studentNameInput').value || "................";
-            document.getElementById('certCourseName').innerText = document.getElementById('courseInput').value || "................";
-            document.getElementById('certDateText').innerText = document.getElementById('dateInput').value || "................";
+            document.getElementById('certStudent').innerText = document.getElementById('inStudent').value || "................";
+            document.getElementById('certCourse').innerText = document.getElementById('inCourse').value || "................";
+            document.getElementById('certStart').innerText = document.getElementById('inStartDate').value || "................";
+            document.getElementById('certEnd').innerText = document.getElementById('inEndDate').value || "................";
+            document.getElementById('certHours').innerText = document.getElementById('inHours').value || "................";
+            document.getElementById('certSign').innerText = document.getElementById('inSign').value || "................";
         }
 
         function downloadCert() {
             const cert = document.getElementById('certificate');
             const btn = document.getElementById('downloadBtn');
             
-            btn.innerHTML = 'جاري التحميل...';
+            btn.innerHTML = '<svg class="spinner" style="width:20px;height:20px;border-width:2px;margin:0;border-top-color:#fff;" viewBox="0 0 24 24"></svg> جاري التحميل...';
             btn.disabled = true;
 
             const originalTransform = cert.style.transform;
@@ -353,23 +348,23 @@
                 html2canvas(cert, {
                     scale: 4,
                     useCORS: true,
-                    backgroundColor: "#ffffff",
+                    backgroundColor: null,
                     width: 1000,
                     height: 707
                 }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = `شهادة_${document.getElementById('certStudentName').innerText}.png`;
+                    link.download = `شهادة_${document.getElementById('inStudent').value}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                     
                     cert.style.transform = originalTransform;
                     
-                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg> تحميل`;
+                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg> تحميل الشهادة (PNG)`;
                     btn.disabled = false;
                     showToast("تم تحميل الشهادة بنجاح!", "success");
                 }).catch(() => {
                     cert.style.transform = originalTransform;
-                    btn.innerHTML = 'خطأ!';
+                    btn.innerHTML = 'حدث خطأ';
                     btn.disabled = false;
                     showToast("حدث خطأ أثناء التحميل", "error");
                 });
