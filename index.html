@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0f1d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>مولد الشهادات الفخم</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #d4af37;
+            --primary-hover: #f1c40f;
+            --bg-dark: #0a0f1d;
+            --bg-card: rgba(20, 28, 47, 0.7);
+            --text-main: #f8f9fa;
+            --text-muted: #a0aec0;
+            --glass-border: rgba(212, 175, 55, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --nav-bg: #111827;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; background-image: radial-gradient(circle at 50% 0%, #1a2436 0%, #0a0f1d 70%); }
+        #loader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .spinner { width: 60px; height: 60px; border: 4px solid rgba(212, 175, 55, 0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #lockScreen { position: fixed; inset: 0; background: rgba(10, 15, 29, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .lock-card { background: var(--bg-card); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 400px; text-align: center; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .lock-icon { width: 70px; height: 70px; fill: var(--primary); margin-bottom: 20px; }
+        .lock-card h2 { font-size: 24px; margin-bottom: 10px; font-weight: 800; }
+        .lock-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; font-size: 18px; text-align: center; letter-spacing: 8px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; }
+        .btn-primary { background: var(--primary); color: var(--bg-dark); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-biometric { background: transparent; border: 2px solid var(--primary); color: var(--primary); margin-top: 15px; }
+        .btn-biometric:hover { background: rgba(212, 175, 55, 0.1); }
+        .btn svg { width: 24px; height: 24px; fill: currentColor; }
+        #app { display: none; flex-direction: column; width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .control-panel { background: var(--bg-card); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; box-shadow: var(--glass-shadow); }
+        .control-group { flex: 1; min-width: 250px; }
+        .control-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
+        .control-group input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: #fff; font-size: 16px; outline: none; transition: 0.3s; }
+        .control-group input:focus { border-color: var(--primary); }
+        .btn-action { padding: 14px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 16px; }
+        .btn-update { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-update:hover { background: rgba(255,255,255,0.2); }
+        .btn-download { background: var(--primary); color: var(--bg-dark); }
+        .btn-download:hover { background: var(--primary-hover); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .cert-wrapper { overflow-x: auto; padding: 20px 0; display: flex; justify-content: center; }
+        #certificate { width: 1050px; height: 740px; background: #ffffff; position: relative; flex-shrink: 0; background-image: radial-gradient(circle at center, #ffffff 0%, #f4f4f4 100%); box-shadow: 0 30px 60px rgba(0,0,0,0.5); border: 20px solid var(--bg-dark); outline: 6px solid var(--primary); outline-offset: -26px; padding: 70px; text-align: center; color: var(--bg-dark); overflow: hidden; }
+        .cert-bg-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.05; }
+        .corner-svg { position: absolute; width: 150px; height: 150px; fill: none; stroke: var(--primary); stroke-width: 2; }
+        .top-right { top: 40px; right: 40px; }
+        .top-left { top: 40px; left: 40px; transform: scaleX(-1); }
+        .bottom-right { bottom: 40px; right: 40px; transform: scaleY(-1); }
+        .bottom-left { bottom: 40px; left: 40px; transform: scale(-1); }
+        .cert-header { font-family: 'Amiri', serif; font-size: 56px; font-weight: 700; color: var(--bg-dark); margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .cert-subtitle { font-size: 22px; color: var(--primary); font-weight: 800; letter-spacing: 5px; margin-bottom: 40px; }
+        .cert-body { font-size: 24px; line-height: 1.8; color: #444; margin-bottom: 30px; }
+        .student-display { font-family: 'Amiri', serif; font-size: 60px; font-weight: 700; color: var(--bg-dark); margin: 20px 0; border-bottom: 3px dashed var(--primary); display: inline-block; padding: 0 40px 15px; }
+        .course-display { font-weight: 800; color: var(--primary); font-size: 30px; }
+        .cert-footer { position: absolute; bottom: 60px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .sign-area { display: flex; flex-direction: column; align-items: center; }
+        .sign-line { width: 200px; border-bottom: 2px solid var(--bg-dark); margin-bottom: 15px; height: 40px; }
+        .sign-text { font-size: 16px; font-weight: 700; color: #666; }
+        .teacher-area { display: flex; flex-direction: column; align-items: center; position: relative; }
+        .teacher-img { width: 140px; height: auto; object-fit: contain; margin-bottom: -15px; z-index: 2; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); }
+        .teacher-info { background: var(--bg-dark); color: #fff; padding: 15px 30px; border-radius: 50px; border: 3px solid var(--primary); text-align: center; z-index: 1; position: relative; }
+        .teacher-name { font-family: 'Amiri', serif; font-size: 22px; font-weight: 700; color: var(--primary); }
+        .teacher-role { font-size: 14px; color: #ddd; margin-top: 4px; }
+        .seal-svg { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 130px; height: 130px; opacity: 0.8; }
+        @media (max-width: 1100px) { .cert-wrapper { justify-content: flex-start; } #certificate { transform: scale(0.8); transform-origin: top right; margin-left: -20%; margin-bottom: -150px; } }
+        @media (max-width: 768px) { .control-panel { flex-direction: column; } #certificate { transform: scale(0.5); transform-origin: top right; margin-left: -45%; margin-bottom: -350px; } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2 style="color: var(--primary); font-family: 'Amiri', serif;">جاري تجهيز النظام...</h2>
+    </div>
+
+    <div id="lockScreen">
+        <div class="lock-card">
+            <svg class="lock-icon" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7V9H5C3.346 9 2 10.346 2 12V20C2 21.654 3.346 23 5 23H19C20.654 23 22 21.654 22 20V12C22 10.346 20.654 9 19 9H18V7C18 3.676 15.324 1 12 1ZM12 3C14.276 3 16 4.724 16 7V9H8V7C8 4.724 9.724 3 12 3ZM12 13C13.105 13 14 13.895 14 15C14 15.74 13.6 16.387 13 16.732V19H11V16.732C10.4 16.387 10 15.74 10 15C10 13.895 10.895 13 12 13Z"/></svg>
+            <h2>منطقة محمية</h2>
+            <p>أدخل الرمز السري أو استخدم بصمة الوجه/الإصبع للدخول</p>
+            <div class="input-group">
+                <input type="password" id="pinInput" placeholder="******" maxlength="6">
+            </div>
+            <button class="btn btn-primary" onclick="verifyPin()">
+                <svg viewBox="0 0 24 24"><path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z"/></svg>
+                دخول بالرمز
+            </button>
+            <button class="btn btn-biometric" onclick="authenticateBiometric()">
+                <svg viewBox="0 0 24 24"><path d="M12 11C9.79 11 8 12.79 8 15C8 17.21 9.79 19 12 19C14.21 19 16 17.21 16 15C16 12.79 14.21 11 12 11ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM12 2C6.48 2 2 6.48 2 12V15C2 18.31 4.69 21 8 21H16C19.31 21 22 18.31 22 15V12C22 6.48 17.52 2 12 2ZM20 15C20 17.21 18.21 19 16 19H8C5.79 19 4 17.21 4 15V12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12V15Z"/></svg>
+                بصمة الوجه / الإصبع
+            </button>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="control-panel">
+            <div class="control-group">
+                <label>اسم الطالب</label>
+                <input type="text" id="studentNameInput" value="أحمد محمود" oninput="updateCert()">
+            </div>
+            <div class="control-group">
+                <label>الدورة / الصف</label>
+                <input type="text" id="courseInput" value="دورة النحو والصرف المتقدم" oninput="updateCert()">
+            </div>
+            <button class="btn-action btn-download" onclick="downloadCert()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg>
+                تحميل الشهادة
+            </button>
+        </div>
+
+        <div class="cert-wrapper">
+            <div id="certificate">
+                <svg class="cert-bg-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <pattern id="pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 10 M 0 0 L 10 10" stroke="#d4af37" stroke-width="0.5"/>
+                    </pattern>
+                    <rect width="100" height="100" fill="url(#pattern)"/>
+                </svg>
+                
+                <svg class="corner-svg top-right" viewBox="0 0 100 100"><path d="M0 100V0H100M10 90V10H90"/></svg>
+                <svg class="corner-svg top-left" viewBox="0 0 100 100"><path d="M0 100V0H100M10 90V10H90"/></svg>
+                <svg class="corner-svg bottom-right" viewBox="0 0 100 100"><path d="M0 100V0H100M10 90V10H90"/></svg>
+                <svg class="corner-svg bottom-left" viewBox="0 0 100 100"><path d="M0 100V0H100M10 90V10H90"/></svg>
+
+                <div class="cert-header">شهادة شكر وتقدير</div>
+                <div class="cert-subtitle">CERTIFICATE OF ACHIEVEMENT</div>
+                
+                <div class="cert-body">تُمنح هذه الشهادة بكل فخر واعتزاز إلى</div>
+                <div class="student-display" id="certStudentName">أحمد محمود</div>
+                <div class="cert-body">
+                    تقديراً لجهوده الاستثنائية وتفوقه الباهر في إتمام<br>
+                    <span class="course-display" id="certCourseName">دورة النحو والصرف المتقدم</span><br>
+                    نسأل الله له دوام التوفيق والنجاح.
+                </div>
+
+                <div class="cert-footer">
+                    <div class="sign-area">
+                        <div class="sign-line"></div>
+                        <div class="sign-text">توقيع الإدارة</div>
+                    </div>
+
+                    <div class="teacher-area">
+                        <img src="mo.png" alt="الأستاذ" class="teacher-img" onerror="this.style.display='none'">
+                        <div class="teacher-info">
+                            <div class="teacher-name">الأستاذ محمد عيسى</div>
+                            <div class="teacher-role">مدرس اللغة العربية</div>
+                        </div>
+                    </div>
+                </div>
+
+                <svg class="seal-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#d4af37" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="#d4af37" stroke-width="1" stroke-dasharray="4 2"/>
+                    <path d="M50 15 L55 35 L75 35 L60 45 L65 65 L50 55 L35 65 L40 45 L25 35 L45 35 Z" fill="#d4af37"/>
+                    <text x="50" y="80" font-size="8" fill="#d4af37" font-weight="bold" text-anchor="middle" font-family="Cairo">ختم رسمي</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            }, 1000);
+        });
+
+        const SECRET_PIN = "123456";
+
+        function verifyPin() {
+            const pin = document.getElementById('pinInput').value;
+            if (pin === SECRET_PIN) {
+                unlock();
+            } else {
+                if(navigator.vibrate) navigator.vibrate(200);
+                document.getElementById('pinInput').style.borderColor = "red";
+                document.getElementById('pinInput').style.boxShadow = "0 0 15px rgba(255,0,0,0.3)";
+                setTimeout(() => {
+                    document.getElementById('pinInput').style.borderColor = "";
+                    document.getElementById('pinInput').style.boxShadow = "";
+                }, 1000);
+            }
+        }
+
+        async function authenticateBiometric() {
+            if (!window.PublicKeyCredential) {
+                alert("جهازك لا يدعم التحقق البيومتري.");
+                return;
+            }
+            try {
+                const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+                if (available) {
+                    const challenge = new Uint8Array(32);
+                    window.crypto.getRandomValues(challenge);
+                    await navigator.credentials.get({
+                        publicKey: {
+                            challenge: challenge,
+                            timeout: 60000,
+                            userVerification: "required"
+                        }
+                    }).then(() => {
+                        unlock();
+                    }).catch(() => {
+                        alert("فشل التحقق البيومتري. يرجى استخدام الرمز.");
+                    });
+                } else {
+                    alert("لا توجد بصمة مسجلة على هذا الجهاز.");
+                }
+            } catch (e) {
+                alert("حدث خطأ أثناء الاتصال بمستشعر البصمة.");
+            }
+        }
+
+        function unlock() {
+            document.getElementById('lockScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('app').style.display = 'flex';
+            }, 500);
+        }
+
+        function updateCert() {
+            document.getElementById('certStudentName').innerText = document.getElementById('studentNameInput').value || "................";
+            document.getElementById('certCourseName').innerText = document.getElementById('courseInput').value || "................";
+        }
+
+        function downloadCert() {
+            const cert = document.getElementById('certificate');
+            html2canvas(cert, {
+                scale: 3,
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `شهادة_${document.getElementById('certStudentName').innerText}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
