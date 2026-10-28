@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0f1d">
-    <title>الشهادات الفخمة | أ. محمد عيسى</title>
-    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0A2342">
+    <title>الشهادات الرسمية</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
+            --navy: #0A2342;
             --gold: #D4AF37;
-            --gold-light: #F3E5AB;
-            --dark: #0B132B;
-            --dark-lighter: #1C2541;
+            --light-blue: #4A90E2;
+            --text-dark: #222;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(212, 175, 55, 0.3);
         }
@@ -21,28 +20,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: var(--dark); 
-            color: #fff; 
+            background-color: #f4f6f9; 
+            color: #333; 
             min-height: 100vh; 
             overflow-x: hidden; 
             display: flex; 
             flex-direction: column;
-            background-image: radial-gradient(circle at top, #1C2541 0%, #0B132B 80%);
         }
 
-        /* --- Loader & Toast --- */
-        #loader { position: fixed; inset: 0; background: var(--dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        #loader { position: fixed; inset: 0; background: var(--navy); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(212, 175, 55, 0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--dark-lighter); color: #fff; padding: 15px 30px; border-radius: 50px; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10001; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 15px 30px; border-radius: 50px; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10001; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; display: flex; align-items: center; gap: 10px; }
         #toast.show { top: 20px; }
         #toast.error { border-color: #ff4757; }
         #toast.success { border-color: #2ed573; }
 
-        /* --- Lock Screen --- */
-        #lockScreen { position: fixed; inset: 0; background: rgba(11, 19, 43, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
-        .lock-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 30px; padding: 40px 25px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        #lockScreen { position: fixed; inset: 0; background: rgba(10, 35, 66, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s; }
+        .lock-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 30px; padding: 40px 25px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; color: #fff; }
         .lock-icon { width: 80px; height: 80px; fill: var(--gold); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
         .lock-card h2 { font-family: 'Amiri', serif; font-size: 28px; color: var(--gold); margin-bottom: 10px; }
         .lock-card p { font-size: 14px; color: #a0aec0; margin-bottom: 30px; }
@@ -50,60 +46,34 @@
         .input-box input { width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; font-size: 22px; text-align: center; letter-spacing: 10px; outline: none; transition: 0.3s; }
         .input-box input:focus { border-color: var(--gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; margin-bottom: 15px; }
-        .btn-primary { background: var(--gold); color: var(--dark); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+        .btn-primary { background: var(--gold); color: var(--navy); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
         .btn-outline { background: transparent; border: 2px solid var(--gold); color: var(--gold); }
         .btn svg { width: 24px; height: 24px; fill: currentColor; }
 
-        /* --- App Dashboard --- */
         #app { display: none; flex-direction: column; width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; opacity: 0; transition: opacity 0.5s; }
-        .top-bar { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .top-bar { background: #fff; border: 1px solid #ddd; border-radius: 20px; padding: 20px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .input-group { flex: 1; min-width: 200px; }
-        .input-group label { display: block; font-size: 13px; color: var(--gold); margin-bottom: 8px; font-weight: 600; }
-        .input-group input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-size: 16px; outline: none; transition: 0.3s; }
-        .input-group input:focus { border-color: var(--gold); }
-        .action-btn { padding: 0 25px; border-radius: 10px; background: var(--gold); color: var(--dark); font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; font-size: 16px; }
-        .action-btn:hover { background: var(--gold-light); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .input-group label { display: block; font-size: 13px; color: var(--navy); margin-bottom: 8px; font-weight: 700; }
+        .input-group input { width: 100%; padding: 12px 15px; background: #f9f9f9; border: 1px solid #ccc; border-radius: 10px; color: #333; font-size: 16px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: var(--gold); background: #fff; }
+        .action-btn { padding: 0 25px; border-radius: 10px; background: var(--navy); color: var(--gold); font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; font-size: 16px; }
+        .action-btn:hover { background: #15365f; box-shadow: 0 0 20px rgba(10, 35, 66, 0.4); }
 
-        /* --- Responsive Wrapper for Certificate --- */
-        .cert-container { 
-            width: 100%; 
-            overflow: hidden; /* Hide overflow to prevent horizontal scrolling */
-            display: flex; 
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        /* --- THE CERTIFICATE (Fixed 1000x707) --- */
+        .cert-container { width: 100%; overflow: hidden; display: flex; justify-content: center; padding: 10px 0; }
+        
         #certificate { 
             width: 1000px; 
             height: 707px; 
             background: #ffffff; 
             position: relative; 
             flex-shrink: 0; 
-            border: 15px solid var(--dark); 
-            outline: 6px solid var(--gold); 
-            outline-offset: -24px; 
-            padding: 40px; 
-            color: var(--dark); 
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             transition: transform 0.2s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
 
-        /* Background Watermark SVG */
-        .watermark {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px; height: 600px;
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Mobile Scaling */
         @media (max-width: 1050px) {
             #certificate { transform: scale(0.75); transform-origin: top center; margin-bottom: -90px; }
         }
@@ -114,164 +84,169 @@
             #certificate { transform: scale(0.35); transform-origin: top center; margin-bottom: -270px; }
         }
 
-        /* --- Certificate Internal Elements --- */
-        .corners-svg { position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; pointer-events: none; z-index: 1; }
+        .cert-bg-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+        .cert-content { position: relative; z-index: 1; padding: 40px 60px; height: 100%; display: flex; flex-direction: column; }
+
+        .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        .header-right { text-align: center; }
+        .header-left { text-align: center; }
+        .header-text { font-size: 14px; font-weight: 700; color: var(--navy); line-height: 1.4; margin-top: 5px; }
+        .logo-svg { height: 60px; width: auto; }
+
+        .cert-body { text-align: center; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -20px; }
+        .cert-title { font-family: 'Amiri', serif; font-size: 42px; font-weight: 700; color: var(--navy); margin-bottom: 30px; }
+        .cert-text { font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.8; margin-bottom: 15px; }
+        .cert-name { font-size: 26px; font-weight: 900; color: var(--light-blue); margin: 0 10px; }
+        .cert-course { font-size: 22px; font-weight: 900; color: var(--light-blue); margin: 0 10px; }
+        .cert-date { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-top: 10px; }
+
+        .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 20px; }
+        .sign-box { text-align: center; width: 250px; }
+        .sign-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+        .sign-name { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 15px; font-family: 'Amiri', serif; }
+        .sign-line { width: 150px; border-bottom: 2px dotted #666; margin: 0 auto; height: 30px; position: relative; }
+        .sign-graphic { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 100px; opacity: 0.8; }
         
-        .cert-header { text-align: center; z-index: 2; position: relative; margin-top: 20px; }
-        .cert-title { font-family: 'Amiri', serif; font-size: 55px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-        .cert-subtitle { font-size: 18px; color: var(--gold); font-weight: 900; letter-spacing: 6px; }
+        .stamp-box { position: relative; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; }
+        .stamp-svg { width: 100%; height: 100%; opacity: 0.8; transform: rotate(-10deg); }
 
-        .cert-body { text-align: center; z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; flex-grow: 1; justify-content: center; margin-top: -20px; }
-        .intro-text { font-size: 22px; color: #555; margin-bottom: 15px; font-weight: 600; }
-        .student-name { font-family: 'Amiri', serif; font-size: 65px; font-weight: 700; color: var(--dark); margin: 10px 0 25px 0; }
-        .gold-dash { width: 600px; height: 2px; border-bottom: 2px dashed var(--gold); margin-bottom: 30px; }
-        .achievement-text { font-size: 20px; color: #444; line-height: 1.8; }
-        .course-name { font-weight: 900; color: var(--gold); font-size: 32px; display: block; margin-top: 10px; }
-
-        /* Footer Layout (Signature, Seal, Teacher) */
-        .cert-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            z-index: 2;
-            position: relative;
-            padding: 0 30px 10px 30px;
-            height: 140px;
-        }
-
-        /* Left: Signature */
-        .signature-area { display: flex; flex-direction: column; align-items: center; width: 220px; }
-        .sign-line { width: 100%; border-bottom: 2px solid var(--dark); margin-bottom: 10px; height: 30px; }
-        .sign-text { font-size: 18px; font-weight: 700; color: var(--dark); }
-
-        /* Center: Seal */
-        .seal-wrapper { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); }
-        .seal-svg { width: 130px; height: 130px; opacity: 0.9; }
-
-        /* Right: Teacher */
-        .teacher-area { display: flex; flex-direction: column; align-items: center; width: 240px; position: relative; }
-        .img-wrapper { 
-            width: 120px; height: 120px; 
-            border-radius: 50%; 
-            border: 4px solid var(--gold); 
-            overflow: hidden; 
-            background: #fff; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15); 
-            margin-bottom: -25px; 
-            z-index: 2; 
-        }
-        .teacher-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-        .teacher-info { 
-            background: var(--dark); 
-            color: #fff; 
-            padding: 25px 20px 10px 20px; 
-            border-radius: 50px; 
-            border: 2px solid var(--gold); 
-            text-align: center; 
-            z-index: 1; 
-            width: 100%;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
-        .teacher-name { font-family: 'Amiri', serif; font-size: 20px; color: var(--gold); font-weight: 700; margin-bottom: 2px; }
-        .teacher-role { font-size: 13px; color: #ddd; font-family: 'Cairo', sans-serif; }
-
+        .bottom-bar { text-align: center; font-size: 12px; color: var(--navy); font-weight: 700; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <div id="toast"><span id="toastMsg"></span></div>
-    <div id="loader"><div class="spinner"></div><h2 style="color: var(--gold); font-family: 'Amiri', serif;">جاري التحميل...</h2></div>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2 style="color: var(--gold); font-family: 'Amiri', serif;">جاري التحميل...</h2>
+    </div>
 
     <div id="lockScreen">
         <div class="lock-card">
             <svg class="lock-icon" viewBox="0 0 24 24"><path d="M12 1C8.676 1 6 3.676 6 7V9H5C3.346 9 2 10.346 2 12V20C2 21.654 3.346 23 5 23H19C20.654 23 22 21.654 22 20V12C22 10.346 20.654 9 19 9H18V7C18 3.676 15.324 1 12 1ZM12 3C14.276 3 16 4.724 16 7V9H8V7C8 4.724 9.724 3 12 3ZM12 13C13.105 13 14 13.895 14 15C14 15.74 13.6 16.387 13 16.732V19H11V16.732C10.4 16.387 10 15.74 10 15C10 13.895 10.895 13 12 13Z"/></svg>
             <h2>الأمان المتقدم</h2>
             <p>أدخل الرمز السري أو استخدم بصمة الوجه/الإصبع</p>
-            <div class="input-box"><input type="password" id="pinInput" placeholder="******" maxlength="6" inputmode="numeric"></div>
-            <button class="btn btn-primary" onclick="verifyPin()"><svg viewBox="0 0 24 24"><path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z"/></svg>دخول بالرمز</button>
-            <button class="btn btn-outline" onclick="handleBiometric()"><svg viewBox="0 0 24 24"><path d="M12 11C9.79 11 8 12.79 8 15C8 17.21 9.79 19 12 19C14.21 19 16 17.21 16 15C16 12.79 14.21 11 12 11ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM12 2C6.48 2 2 6.48 2 12V15C2 18.31 4.69 21 8 21H16C19.31 21 22 18.31 22 15V12C22 6.48 17.52 2 12 2ZM20 15C20 17.21 18.21 19 16 19H8C5.79 19 4 17.21 4 15V12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12V15Z"/></svg>بصمة / تفعيل البصمة</button>
+            <div class="input-box">
+                <input type="password" id="pinInput" placeholder="******" maxlength="6" inputmode="numeric">
+            </div>
+            <button class="btn btn-primary" onclick="verifyPin()">
+                <svg viewBox="0 0 24 24"><path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15 8H9V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8Z"/></svg>
+                دخول بالرمز
+            </button>
+            <button class="btn btn-outline" onclick="handleBiometric()">
+                <svg viewBox="0 0 24 24"><path d="M12 11C9.79 11 8 12.79 8 15C8 17.21 9.79 19 12 19C14.21 19 16 17.21 16 15C16 12.79 14.21 11 12 11ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM12 2C6.48 2 2 6.48 2 12V15C2 18.31 4.69 21 8 21H16C19.31 21 22 18.31 22 15V12C22 6.48 17.52 2 12 2ZM20 15C20 17.21 18.21 19 16 19H8C5.79 19 4 17.21 4 15V12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12V15Z"/></svg>
+                تفعيل / بصمة
+            </button>
         </div>
     </div>
 
     <div id="app">
         <div class="top-bar">
             <div class="input-group">
-                <label>اسم الطالب</label>
-                <input type="text" id="studentNameInput" value="السيد حسن عيسى" oninput="updateCert()">
+                <label>اسم المتدربة</label>
+                <input type="text" id="studentNameInput" value="وداد بنت سعود الحتيبي" oninput="updateCert()">
             </div>
             <div class="input-group">
-                <label>الصف / الدورة</label>
-                <input type="text" id="courseInput" value="الصف الثالث الثانوي" oninput="updateCert()">
+                <label>البرنامج التدريبي</label>
+                <input type="text" id="courseInput" value="جغرافيات" oninput="updateCert()">
+            </div>
+            <div class="input-group">
+                <label>الفترة والتاريخ</label>
+                <input type="text" id="dateInput" value="من 15/2/1444هـ إلى 17/2/1444هـ" oninput="updateCert()">
             </div>
             <button class="action-btn" id="downloadBtn" onclick="downloadCert()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg>تحميل الشهادة
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg>
+                تحميل
             </button>
         </div>
 
         <div class="cert-container">
             <div id="certificate">
                 
-                <!-- Watermark SVG (Faint Background Pattern) -->
-                <svg class="watermark" viewBox="0 0 100 100">
-                    <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="#000" stroke-width="0.5"/>
-                    <circle cx="50" cy="50" r="30" fill="none" stroke="#000" stroke-width="0.5"/>
-                    <path d="M50 20 L80 50 L50 80 L20 50 Z" fill="none" stroke="#000" stroke-width="0.5"/>
+                <svg class="cert-bg-svg" viewBox="0 0 1000 707" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#D4AF37" />
+                            <stop offset="50%" stop-color="#F3E5AB" />
+                            <stop offset="100%" stop-color="#D4AF37" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="20" y="20" width="960" height="667" fill="none" stroke="url(#goldGrad)" stroke-width="4" rx="15"/>
+                    <rect x="30" y="30" width="940" height="647" fill="none" stroke="#D4AF37" stroke-width="1" rx="10"/>
+                    <path d="M 1000 0 L 850 0 C 820 80, 750 150, 650 150 L 1000 150 Z" fill="#0A2342"/>
+                    <path d="M 1000 150 C 820 150, 750 80, 700 0 L 1000 0 Z" fill="#112d52" opacity="0.8"/>
+                    <path d="M 0 707 L 150 707 C 180 627, 250 557, 350 557 L 0 557 Z" fill="#0A2342"/>
+                    <path d="M 0 557 C 180 557, 250 627, 300 707 L 0 707 Z" fill="#112d52" opacity="0.8"/>
+                    <path d="M 1000 150 C 750 150, 700 0, 700 0" fill="none" stroke="#D4AF37" stroke-width="4"/>
+                    <path d="M 0 557 C 250 557, 300 707, 300 707" fill="none" stroke="#D4AF37" stroke-width="4"/>
                 </svg>
 
-                <!-- Corner Decorations -->
-                <svg class="corners-svg" viewBox="0 0 1000 707">
-                    <path d="M 20 80 L 20 20 L 80 20" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M 920 20 L 980 20 L 980 80" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M 980 627 L 980 687 L 920 687" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M 80 687 L 20 687 L 20 627" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-
-                <!-- Header -->
-                <div class="cert-header">
-                    <div class="cert-title">شهادة شكر وتقدير</div>
-                    <div class="cert-subtitle">CERTIFICATE OF ACHIEVEMENT</div>
-                </div>
-
-                <!-- Body -->
-                <div class="cert-body">
-                    <div class="intro-text">تُمنح هذه الشهادة بكل فخر واعتزاز إلى</div>
-                    <div class="student-name" id="certStudentName">السيد حسن عيسى</div>
-                    <div class="gold-dash"></div>
-                    <div class="achievement-text">
-                        تقديراً لجهوده الاستثنائية وتفوقه الباهر في إتمام
-                        <span class="course-name" id="certCourseName">الصف الثالث الثانوي</span>
-                        نسأل الله له دوام التوفيق والنجاح.
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="cert-footer">
-                    <!-- Left: Signature -->
-                    <div class="signature-area">
-                        <div class="sign-line"></div>
-                        <div class="sign-text">توقيع الإدارة</div>
-                    </div>
-
-                    <!-- Center: Seal -->
-                    <div class="seal-wrapper">
-                        <svg class="seal-svg" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="#D4AF37" stroke-width="2"/>
-                            <circle cx="50" cy="50" r="38" fill="none" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 2"/>
-                            <path d="M50 15 L55 35 L75 35 L60 45 L65 65 L50 55 L35 65 L40 45 L25 35 L45 35 Z" fill="#D4AF37"/>
-                            <text x="50" y="80" font-size="10" fill="#D4AF37" font-weight="bold" text-anchor="middle" font-family="Cairo">ختم رسمي</text>
-                        </svg>
-                    </div>
-
-                    <!-- Right: Teacher -->
-                    <div class="teacher-area">
-                        <div class="img-wrapper">
-                            <!-- مسار صورة الأستاذ -->
-                            <img src="mo.png" alt="الأستاذ" class="teacher-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23ddd\'/><text x=\'50\' y=\'55\' font-size=\'10\' text-anchor=\'middle\' fill=\'%23666\'>صورة</text></svg>'">
+                <div class="cert-content">
+                    <div class="cert-header">
+                        <div class="header-right">
+                            <svg class="logo-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#0A2342"/><path d="M30 50 L70 50 M50 30 L50 70" stroke="#fff" stroke-width="5"/></svg>
+                            <div class="header-text">المملكة العربية السعودية<br>وزارة التعليم<br>الإدارة العامة للتعليم بالمنطقة الشرقية</div>
                         </div>
-                        <div class="teacher-info">
-                            <div class="teacher-name">الأستاذ محمد عيسى</div>
-                            <div class="teacher-role">مدرس اللغة العربية</div>
+                        <div class="header-left">
+                            <svg class="logo-svg" viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="#4A90E2" rx="10"/><path d="M40 40 L60 40 M40 60 L60 60" stroke="#fff" stroke-width="5"/></svg>
+                            <div class="header-text">مبادرة<br>تطوير الموارد البشرية</div>
                         </div>
+                    </div>
+
+                    <div class="cert-body">
+                        <div class="cert-title">شهادة حضور برنامج تدريبي</div>
+                        
+                        <div class="cert-text">
+                            تشهد إدارة الموارد البشرية بالإدارة العامة للتعليم بالمنطقة الشرقية أن
+                        </div>
+                        <div class="cert-text">
+                            الموظفة / <span class="cert-name" id="certStudentName">وداد بنت سعود الحتيبي</span>
+                        </div>
+                        <div class="cert-text">
+                            قد حضرت البرنامج التدريبي عن بعد <span class="cert-course" id="certCourseName">(جغرافيات)</span>
+                        </div>
+                        <div class="cert-text" style="font-size: 18px;">
+                            بقيادة المدربة / أ. هند الدوسري
+                        </div>
+                        <div class="cert-date">
+                            خلال الفترة (<span id="certDateText">من 15/2/1444هـ إلى 17/2/1444هـ</span>) بواقع ( 15 ) ساعة تدريبية
+                        </div>
+                        <div class="cert-text" style="margin-top: 20px; font-size: 18px;">
+                            راجين لها دوام التوفيق والسداد...
+                        </div>
+                    </div>
+
+                    <div class="cert-footer">
+                        <div class="sign-box">
+                            <div class="sign-title">مديرة وحدة تطوير الموارد البشرية</div>
+                            <div class="sign-name">منال بنت عوض عشوش</div>
+                            <div class="sign-line">
+                                <svg class="sign-graphic" viewBox="0 0 100 50"><path d="M10 40 Q 30 10, 50 40 T 90 40" fill="none" stroke="#0A2342" stroke-width="2"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="stamp-box">
+                            <svg class="stamp-svg" viewBox="0 0 100 100">
+                                <ellipse cx="50" cy="50" rx="45" ry="35" fill="none" stroke="#0A2342" stroke-width="2"/>
+                                <ellipse cx="50" cy="50" rx="40" ry="30" fill="none" stroke="#0A2342" stroke-width="1"/>
+                                <text x="50" y="45" font-size="8" fill="#0A2342" font-weight="bold" text-anchor="middle">ختم إدارة الموارد البشرية</text>
+                                <text x="50" y="60" font-size="6" fill="#0A2342" text-anchor="middle">إدارة التعليم بالمنطقة الشرقية</text>
+                            </svg>
+                        </div>
+
+                        <div class="sign-box">
+                            <div class="sign-title">مدير إدارة الموارد البشرية</div>
+                            <div class="sign-name">عبدالله بن يحيى العيسى</div>
+                            <div class="sign-line">
+                                <svg class="sign-graphic" viewBox="0 0 100 50"><path d="M20 30 C 40 50, 60 10, 80 30" fill="none" stroke="#0A2342" stroke-width="2"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-bar">
+                        hrdu@eduast.gov.sa
                     </div>
                 </div>
 
@@ -298,26 +273,36 @@
 
         function verifyPin() {
             const pin = document.getElementById('pinInput').value;
-            if (pin === SECRET_PIN) { unlockApp(); } 
-            else {
+            if (pin === SECRET_PIN) { 
+                unlockApp(); 
+            } else {
                 if(navigator.vibrate) navigator.vibrate(200);
                 showToast("الرمز السري خطأ!", "error");
             }
         }
 
         async function handleBiometric() {
-            if (!window.PublicKeyCredential) { showToast("جهازك لا يدعم البصمة.", "error"); return; }
-            const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-            if (!isAvailable) { showToast("لا توجد بصمة مسجلة. استخدم الرمز.", "error"); return; }
+            if (!window.PublicKeyCredential) { 
+                showToast("جهازك لا يدعم البصمة. استخدم الرمز السري.", "error"); 
+                return; 
+            }
+            
+            try {
+                const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+                if (!isAvailable) { 
+                    showToast("لا توجد بصمة مسجلة على الجهاز. استخدم الرمز السري.", "error"); 
+                    return; 
+                }
 
-            const isRegistered = localStorage.getItem('bio_registered');
+                const isRegistered = localStorage.getItem('bio_registered');
 
-            if (!isRegistered) {
-                try {
-                    const challenge = new Uint8Array(32); crypto.getRandomValues(challenge);
+                if (!isRegistered) {
+                    const challenge = new Uint8Array(32); 
+                    crypto.getRandomValues(challenge);
                     await navigator.credentials.create({
                         publicKey: {
-                            challenge: challenge, rp: { name: "Eissa Certificates" },
+                            challenge: challenge,
+                            rp: { name: "Certificate Portal" },
                             user: { id: new Uint8Array(16), name: "teacher", displayName: "Teacher" },
                             pubKeyCredParams: [{ type: "public-key", alg: -7 }],
                             authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }
@@ -326,13 +311,16 @@
                     localStorage.setItem('bio_registered', 'true');
                     showToast("تم تفعيل البصمة بنجاح!", "success");
                     unlockApp();
-                } catch (e) { showToast("فشل التفعيل. تأكد من قفل الشاشة للجهاز.", "error"); }
-            } else {
-                try {
-                    const challenge = new Uint8Array(32); crypto.getRandomValues(challenge);
-                    await navigator.credentials.get({ publicKey: { challenge: challenge, userVerification: "required" } });
+                } else {
+                    const challenge = new Uint8Array(32); 
+                    crypto.getRandomValues(challenge);
+                    await navigator.credentials.get({ 
+                        publicKey: { challenge: challenge, userVerification: "required" } 
+                    });
                     unlockApp();
-                } catch (e) { showToast("فشل التحقق. استخدم الرمز.", "error"); }
+                }
+            } catch (error) {
+                showToast("فشل التحقق البيومتري. يرجى استخدام الرمز السري.", "error");
             }
         }
 
@@ -348,6 +336,7 @@
         function updateCert() {
             document.getElementById('certStudentName').innerText = document.getElementById('studentNameInput').value || "................";
             document.getElementById('certCourseName').innerText = document.getElementById('courseInput').value || "................";
+            document.getElementById('certDateText').innerText = document.getElementById('dateInput').value || "................";
         }
 
         function downloadCert() {
@@ -357,14 +346,12 @@
             btn.innerHTML = 'جاري التحميل...';
             btn.disabled = true;
 
-            // 1. Temporarily remove mobile scaling to capture the TRUE 1000x707 layout
             const originalTransform = cert.style.transform;
             cert.style.transform = 'none';
 
-            // 2. Wait a tiny bit for the DOM to update, then capture
             setTimeout(() => {
                 html2canvas(cert, {
-                    scale: 4, // Ultra HD Quality
+                    scale: 4,
                     useCORS: true,
                     backgroundColor: "#ffffff",
                     width: 1000,
@@ -375,10 +362,9 @@
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                     
-                    // Restore mobile scaling
                     cert.style.transform = originalTransform;
                     
-                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg> تحميل الشهادة`;
+                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9H15V3H9V9H5L12 16L19 9ZM5 18V20H19V18H5Z"/></svg> تحميل`;
                     btn.disabled = false;
                     showToast("تم تحميل الشهادة بنجاح!", "success");
                 }).catch(() => {
