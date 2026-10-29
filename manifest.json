@@ -1,17 +1,1 @@
-{
-  "name": "مولد الشهادات الفخم",
-  "short_name": "الشهادات",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0a0f1d",
-  "theme_color": "#d4af37",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBhMGYxZCIvPjxwYXRoIGQ9Ik0xMjggMjU2bDg1IDg1IDE3MS0xNzEiIHN0cm9rZT0iI2Q0YWYzNyIgc3Ryb2tlLXdpZHRoPSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
-}
+{"name":"مولّد شهادات اللغة العربية - أ/ محمد عيسى","short_name":"مولّد الشهادات","lang":"ar","dir":"rtl","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#0a1c16","theme_color":"#0a1c16","icons":[{"src":"assets/mo.png","sizes":"192x192","type":"image/png","purpose":"any maskable"}]}
